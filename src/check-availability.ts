@@ -14,7 +14,7 @@ const PRODUCT = "2";
 const TOWNSHIP = process.env.TOWNSHIP ?? "16"; // default: Ede (16)
 const SITE = "1";
 const LANGUAGE = "nl";
-const LOOKAHEAD_DAYS = 14;
+const LOOKAHEAD_DAYS = 30;
 const CACHE_FILE = "availability_cache.json";
 
 const TELEGRAM_TOKEN = process.env.TELEGRAM_BOT_TOKEN ?? "";
@@ -76,8 +76,8 @@ async function getSession(): Promise<string> {
   });
 
   const setCookie = pageRes.headers.get("set-cookie") ?? "";
-  const match = setCookie.match(/PHPSESSID=([^;,\s]+)/);
-  const sessionId = match ? match[1] : "";
+  const phpMatch = setCookie.match(/PHPSESSID=([^;,\s]+)/);
+  const sessionId = phpMatch ? phpMatch[1] : "";
 
   if (!sessionId) {
     console.warn("Could not obtain PHPSESSID");
@@ -102,8 +102,17 @@ async function getSession(): Promise<string> {
     console.warn("SetProfileOption did not return success:", setBody);
   }
 
-  console.log(`Session ready (PHPSESSID=${sessionId}, township=${TOWNSHIP})`);
-  return sessionId;
+  // The SetProfileOption response sets a visitor_id cookie that the calendar
+  // endpoint requires in addition to PHPSESSID.
+  const visitorMatch = (setRes.headers.get("set-cookie") ?? "").match(/visitor_id=([^;,\s]+)/);
+  const visitorId = visitorMatch ? visitorMatch[1] : "";
+
+  const cookieString = visitorId
+    ? `PHPSESSID=${sessionId}; visitor_id=${visitorId}`
+    : `PHPSESSID=${sessionId}`;
+
+  console.log(`Session ready (township=${TOWNSHIP}, visitor_id=${visitorId ? "set" : "missing"})`);
+  return cookieString;
 }
 
 // ─── Calendar fetch ───────────────────────────────────────────────────────────
@@ -111,7 +120,7 @@ async function getSession(): Promise<string> {
 async function fetchCalendarMonth(
   year: number,
   month: number,
-  sessionId: string
+  cookieString: string
 ): Promise<CalendarDay[]> {
   const url = `${CALENDAR_BASE_URL}?product=${PRODUCT}&y=${year}&m=${month}&language=${LANGUAGE}&township=${TOWNSHIP}&site=${SITE}`;
 
@@ -121,7 +130,7 @@ async function fetchCalendarMonth(
       Accept: "application/json, text/javascript, */*; q=0.01",
       "X-Requested-With": "XMLHttpRequest",
       Referer: RENTAL_PAGE_URL,
-      Cookie: `PHPSESSID=${sessionId}`,
+      Cookie: cookieString,
     },
   });
 
@@ -157,6 +166,7 @@ function getUpcomingDateRange(): { start: Date; end: Date } {
   start.setHours(0, 0, 0, 0);
   const end = new Date(start);
   end.setDate(end.getDate() + LOOKAHEAD_DAYS);
+  end.setHours(23, 59, 59, 999); // inclusive end
   return { start, end };
 }
 
@@ -252,6 +262,7 @@ function buildMessage(rows: SlotRow[]): string {
   lines.push("─".repeat(46));
 
   for (const row of rows) {
+    console.log(`Processing ${row.date}: state=${row.state}, slots=${row.slots.join(", ")}, isNew=${row.isNew}`);
     const icon = row.state === "available" ? "✅" : "⚡";
     const newTag = row.isNew ? " 🆕" : "   ";
     const dateLabel = formatDateNL(row.date).padEnd(24);
@@ -271,7 +282,7 @@ function buildMessage(rows: SlotRow[]): string {
 async function main(): Promise<void> {
   console.log("Fetching ACV trailer calendar…");
 
-  const sessionId = await getSession();
+  const cookieString = await getSession();
 
   const now = new Date();
   const thisYear = now.getFullYear();
@@ -280,8 +291,8 @@ async function main(): Promise<void> {
   const nextYear = thisMonth === 12 ? thisYear + 1 : thisYear;
 
   const [currentMonthDays, nextMonthDays] = await Promise.all([
-    fetchCalendarMonth(thisYear, thisMonth, sessionId),
-    fetchCalendarMonth(nextYear, nextMonth, sessionId),
+    fetchCalendarMonth(thisYear, thisMonth, cookieString),
+    fetchCalendarMonth(nextYear, nextMonth, cookieString),
   ]);
 
   const { start, end } = getUpcomingDateRange();
@@ -289,7 +300,7 @@ async function main(): Promise<void> {
   const upcomingAvailable = [...currentMonthDays, ...nextMonthDays].filter((d) => {
     if (d.state !== "available" && d.state !== "semi") return false;
     const date = new Date(`${d.date}T00:00:00`);
-    return date >= start && date < end;
+    return date >= start && date <= end;
   });
 
   console.log(

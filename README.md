@@ -6,7 +6,7 @@ GitHub Action die elke 15 minuten de beschikbaarheid van ACV aanhangwagens contr
 
 1. Verkrijgt een sessie op de ACV website (PHPSESSID + gemeente activeren)
 2. Haalt de verhuurkalender op voor de huidige en volgende maand
-3. Filtert beschikbare en gedeeltelijk beschikbare datums in de komende 14 dagen
+3. Filtert beschikbare en gedeeltelijk beschikbare datums in de komende 30 dagen
 4. Vergelijkt met de vorige controle (gecached in GitHub Actions)
 5. Stuurt alleen een Telegram-bericht als er **nieuwe** tijdsloten zijn
 

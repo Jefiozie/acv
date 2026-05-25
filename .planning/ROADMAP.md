@@ -74,7 +74,7 @@ Plans:
 **UI hint**: yes
 
 Plans:
-- [ ] 03-01: Angular project scaffold — `ng new acv-frontend --standalone --style=scss --routing=true` inside `frontend/`; `provideRouter()` + `provideHttpClient()`; lazy-loaded route components for `/`, `/bevestigen`, `/uitschrijven`, `/privacy`; `ChangeDetectionStrategy.OnPush` on all components; environment config (`environment.ts`) for API base URL; Vitest replaces Karma
+- [x] 03-01: Angular project scaffold — `ng new acv-frontend --standalone --style=scss --routing=true` inside `frontend/`; `provideRouter()` + `provideHttpClient()`; lazy-loaded route components for `/`, `/bevestigen`, `/uitschrijven`, `/privacy`; `ChangeDetectionStrategy.OnPush` on all components; environment config (`environment.ts`) for API base URL; Vitest replaces Karma
 - [ ] 03-02: Subscribe form component — Signal Forms (`form()` + validators); `email` field with RFC 5322 validation; `townshipId` dropdown loaded via `httpResource<Township[]>`; `frequency` radio group ("Meteen" / "Dagelijks overzicht"); form submit calls `POST /subscribe`; success state shows "Controleer je e-mail" message; duplicate/rate-limit errors handled gracefully
 - [ ] 03-03: Confirmation, unsubscribed, and privacy pages — `/bevestigen?token=X` reads token via `input<string>()` + `withComponentInputBinding()`, calls `GET /api/confirm`, shows success or error state; `/uitschrijven?token=X` reads token, calls `GET /api/unsubscribe`, shows "Uitgeschreven" or error state; `/privacy` static Dutch-language privacy policy page; all pages accessible (ARIA, keyboard nav, mobile-responsive)
 - [ ] 03-04: API integration + error handling — `SubscriptionService` wrapping all API calls with typed zod-aligned request/response models; global HTTP error interceptor (network failures, 4xx, 5xx → user-friendly Dutch messages); CORS verified against deployed API Gateway; `ng build` produces clean production bundle with no lint errors
@@ -112,7 +112,7 @@ Plans:
 |-------|----------------|--------|-----------|
 | 1. Infrastructure Foundation | 0/4 | Not started | - |
 | 2. Backend — Subscription API + Checker + Notifications | 0/4 | Not started | - |
-| 3. Angular SPA | 0/4 | Not started | - |
+| 3. Angular SPA | 1/4 | In Progress|  |
 | 4. Frontend Hosting + Production Hardening | 0/4 | Not started | - |
 
 ---

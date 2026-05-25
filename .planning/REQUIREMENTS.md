@@ -56,7 +56,7 @@
 
 ### Frontend
 
-- [ ] **FE-01**: Angular 21+ SPA — standalone components, signals, new `@if`/`@for` control flow, no NgModules
+- [x] **FE-01**: Angular 21+ SPA — standalone components, signals, new `@if`/`@for` control flow, no NgModules
 - [ ] **FE-02**: Subscribe form validates email format and requires township + frequency selection before submit
 - [ ] **FE-03**: Form shows success state after submission (instructs user to check email)
 - [ ] **FE-04**: Confirmation page shown when user clicks the confirmation link from email
@@ -138,7 +138,7 @@
 | NOTIF-02 | Phase 2 | Pending |
 | NOTIF-03 | Phase 2 | Pending |
 | NOTIF-04 | Phase 2 | Pending |
-| FE-01 | Phase 3 | Pending |
+| FE-01 | Phase 3 | Complete |
 | FE-02 | Phase 3 | Pending |
 | FE-03 | Phase 3 | Pending |
 | FE-04 | Phase 3 | Pending |

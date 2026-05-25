@@ -7,9 +7,11 @@ const RENTAL_PAGE_URL =
   "https://www.acv-groep.nl/afval/waardepunt/aanhanger-lenen";
 const CALENDAR_BASE_URL =
   "https://www.acv-groep.nl/ajax/RentalProducts/getCalendar";
+const SET_PROFILE_URL =
+  "https://www.acv-groep.nl/ajax/Filters/SetProfileOption";
 
 const PRODUCT = "2";
-const TOWNSHIP = "1";
+const TOWNSHIP = process.env.TOWNSHIP ?? "16"; // default: Ede (16)
 const SITE = "1";
 const LANGUAGE = "nl";
 const LOOKAHEAD_DAYS = 14;
@@ -18,36 +20,90 @@ const CACHE_FILE = "availability_cache.json";
 const TELEGRAM_TOKEN = process.env.TELEGRAM_BOT_TOKEN ?? "";
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID ?? "";
 
+const USER_AGENT =
+  "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-/** Shape returned by the ACV calendar API. The API may return various formats;
- *  `parseCalendarResponse` handles normalization into this shape. */
+type DayState = "available" | "semi" | "full" | "unavailable";
+
+interface TimePart {
+  id: string;
+  text: string; // e.g. "08:00:00 - 10:00:00"
+  status: "available" | "disabled";
+}
+
 interface CalendarDay {
-  date: string; // YYYY-MM-DD
-  available: boolean;
+  day: string;
+  date: string;     // "YYYY-MM-DD"
+  weekday: string;  // "1" = Monday .. "7" = Sunday
+  state: DayState;
+  parts?: TimePart[];
+}
+
+interface CalendarResponse {
+  valid: boolean;
+  year: number;
+  month: number;
+  month_name: string;
+  days: CalendarDay[];
+}
+
+/** Cache: date → available time slot texts */
+interface CacheEntry {
+  state: DayState;
+  slots: string[];
 }
 
 interface Cache {
-  availableDates: string[];
+  [date: string]: CacheEntry;
 }
 
 // ─── Session ─────────────────────────────────────────────────────────────────
 
-/** Visit the rental page to obtain a valid PHPSESSID cookie. */
-async function getSessionCookie(): Promise<string> {
-  const res = await fetch(RENTAL_PAGE_URL, {
+/**
+ * Establishes a session:
+ * 1. GET rental page → obtain PHPSESSID
+ * 2. POST SetProfileOption to activate the township in the session
+ */
+async function getSession(): Promise<string> {
+  const pageRes = await fetch(RENTAL_PAGE_URL, {
     headers: {
-      "User-Agent":
-        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-      Accept:
-        "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+      "User-Agent": USER_AGENT,
+      Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
     },
     redirect: "follow",
   });
 
-  const setCookie = res.headers.get("set-cookie") ?? "";
+  const setCookie = pageRes.headers.get("set-cookie") ?? "";
   const match = setCookie.match(/PHPSESSID=([^;,\s]+)/);
-  return match ? match[1] : "";
+  const sessionId = match ? match[1] : "";
+
+  if (!sessionId) {
+    console.warn("Could not obtain PHPSESSID");
+    return "";
+  }
+
+  const setRes = await fetch(SET_PROFILE_URL, {
+    method: "POST",
+    headers: {
+      "User-Agent": USER_AGENT,
+      "Content-Type": "application/x-www-form-urlencoded",
+      "X-Requested-With": "XMLHttpRequest",
+      Accept: "application/json",
+      Referer: RENTAL_PAGE_URL,
+      Cookie: `PHPSESSID=${sessionId}`,
+    },
+    body: `option=${TOWNSHIP}`,
+  });
+
+  const setBody = (await setRes.json()) as { success?: boolean };
+  if (!setBody.success) {
+    console.warn("SetProfileOption did not return success:", setBody);
+  }
+
+  console.log(`Session ready (PHPSESSID=${sessionId}, township=${TOWNSHIP})`);
+  return sessionId;
 }
 
 // ─── Calendar fetch ───────────────────────────────────────────────────────────
@@ -61,117 +117,40 @@ async function fetchCalendarMonth(
 
   const res = await fetch(url, {
     headers: {
-      "User-Agent":
-        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+      "User-Agent": USER_AGENT,
       Accept: "application/json, text/javascript, */*; q=0.01",
       "X-Requested-With": "XMLHttpRequest",
       Referer: RENTAL_PAGE_URL,
-      Cookie: sessionId ? `PHPSESSID=${sessionId}` : "",
+      Cookie: `PHPSESSID=${sessionId}`,
     },
   });
 
   const text = await res.text();
+  const label = `${year}-${String(month).padStart(2, "0")}`;
 
   if (!text.trim()) {
-    console.warn(`Empty response for ${year}-${String(month).padStart(2, "0")}`);
+    console.warn(`Empty response for ${label}`);
     return [];
   }
 
+  let data: CalendarResponse;
   try {
-    const data: unknown = JSON.parse(text);
-    return parseCalendarResponse(data, year, month);
+    data = JSON.parse(text) as CalendarResponse;
   } catch {
-    console.error(
-      `Failed to parse JSON for ${year}-${month}. Raw response (first 500 chars):\n`,
-      text.slice(0, 500)
-    );
+    console.error(`Failed to parse JSON for ${label}. First 300 chars:\n`, text.slice(0, 300));
     return [];
   }
-}
 
-/**
- * Normalise the API response into CalendarDay[].
- *
- * The ACV API response format is inferred. The most common pattern for PHP
- * rental calendar APIs is an object where keys are dates and values contain
- * an availability flag, or an array of day objects. Both are handled here.
- * If you need to adjust the parsing, update this function.
- */
-function parseCalendarResponse(
-  data: unknown,
-  year: number,
-  month: number
-): CalendarDay[] {
-  const days: CalendarDay[] = [];
-
-  // Format 1: array of objects with `date` and `available`/`status` fields
-  if (Array.isArray(data)) {
-    for (const item of data) {
-      if (item && typeof item === "object") {
-        const obj = item as Record<string, unknown>;
-        const date = resolveDate(obj, year, month);
-        if (date) {
-          days.push({ date, available: resolveAvailability(obj) });
-        }
-      }
-    }
-    return days;
+  if (!data.valid) {
+    console.warn(`API returned valid=false for ${label}`);
+    return [];
   }
 
-  // Format 2: object where keys are day numbers or full dates
-  if (data && typeof data === "object" && !Array.isArray(data)) {
-    const obj = data as Record<string, unknown>;
-
-    // Sub-key `days` or `calendar`
-    if (Array.isArray(obj.days)) return parseCalendarResponse(obj.days, year, month);
-    if (Array.isArray(obj.calendar)) return parseCalendarResponse(obj.calendar, year, month);
-
-    // Keys are day numbers (1-31)
-    for (const [key, value] of Object.entries(obj)) {
-      const dayNum = parseInt(key, 10);
-      if (!isNaN(dayNum) && dayNum >= 1 && dayNum <= 31) {
-        const date = `${year}-${String(month).padStart(2, "0")}-${String(dayNum).padStart(2, "0")}`;
-        if (value && typeof value === "object") {
-          days.push({ date, available: resolveAvailability(value as Record<string, unknown>) });
-        } else {
-          days.push({ date, available: Boolean(value) });
-        }
-      }
-    }
-  }
-
-  return days;
+  console.log(`Fetched ${data.days.length} days for ${label} (${data.month_name})`);
+  return data.days;
 }
 
-function resolveDate(
-  obj: Record<string, unknown>,
-  year: number,
-  month: number
-): string | null {
-  // Full ISO date
-  if (typeof obj.date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(obj.date))
-    return obj.date;
-  // Day number only
-  const day = obj.day ?? obj.dayNumber ?? obj.number;
-  if (typeof day === "number" || (typeof day === "string" && !isNaN(Number(day)))) {
-    return `${year}-${String(month).padStart(2, "0")}-${String(Number(day)).padStart(2, "0")}`;
-  }
-  return null;
-}
-
-function resolveAvailability(obj: Record<string, unknown>): boolean {
-  // Common field names for availability
-  for (const key of ["available", "isAvailable", "status", "free", "open"]) {
-    const val = obj[key];
-    if (val === true || val === 1 || val === "1" || val === "available" || val === "open")
-      return true;
-    if (val === false || val === 0 || val === "0" || val === "unavailable" || val === "closed")
-      return false;
-  }
-  return false;
-}
-
-// ─── Date helpers ─────────────────────────────────────────────────────────────
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function getUpcomingDateRange(): { start: Date; end: Date } {
   const start = new Date();
@@ -182,12 +161,17 @@ function getUpcomingDateRange(): { start: Date; end: Date } {
 }
 
 function formatDateNL(dateStr: string): string {
-  const date = new Date(`${dateStr}T00:00:00`);
-  return date.toLocaleDateString("nl-NL", {
-    weekday: "short",
+  const d = new Date(`${dateStr}T00:00:00`);
+  return d.toLocaleDateString("nl-NL", {
+    weekday: "long",
     day: "numeric",
     month: "long",
   });
+}
+
+/** "08:00:00 - 10:00:00" → "08:00 - 10:00" */
+function normalizeTime(text: string): string {
+  return text.replace(/:00(?= |-|$)/g, "");
 }
 
 // ─── Cache ────────────────────────────────────────────────────────────────────
@@ -200,7 +184,7 @@ function loadCache(): Cache {
       // Corrupt cache — start fresh
     }
   }
-  return { availableDates: [] };
+  return {};
 }
 
 function saveCache(cache: Cache): void {
@@ -247,38 +231,38 @@ function sendTelegram(message: string): Promise<void> {
   });
 }
 
-// ─── Markdown table ───────────────────────────────────────────────────────────
+// ─── Message builder ──────────────────────────────────────────────────────────
 
-function buildMessage(newDates: string[], allAvailable: string[]): string {
+interface SlotRow {
+  date: string;
+  state: DayState;
+  slots: string[];
+  isNew: boolean;
+}
+
+function buildMessage(rows: SlotRow[]): string {
+  const newCount = rows.filter((r) => r.isNew).length;
   const lines: string[] = [];
 
-  lines.push("🚨 <b>ACV Aanhanger — Nieuwe beschikbare datums!</b>");
+  lines.push(`🚨 <b>ACV Aanhanger — ${newCount} nieuwe tijdslot(en) beschikbaar!</b>`);
+  lines.push(`<i>Komende ${LOOKAHEAD_DAYS} dagen — volledig overzicht</i>`);
   lines.push("");
+  lines.push("<pre>");
+  lines.push("Datum                   Tijdsloten");
+  lines.push("─".repeat(46));
 
-  if (newDates.length > 0) {
-    lines.push(`✅ <b>Nieuw beschikbaar (${newDates.length}x):</b>`);
-    for (const d of newDates) lines.push(`  • ${formatDateNL(d)}`);
-    lines.push("");
-  }
-
-  if (allAvailable.length > 0) {
-    lines.push(`📅 <b>Alle beschikbare datums (komende ${LOOKAHEAD_DAYS} dagen):</b>`);
-    lines.push("");
-    lines.push("<pre>");
-    lines.push("Datum            Dag");
-    lines.push("───────────────────────");
-    for (const d of allAvailable) {
-      const date = new Date(`${d}T00:00:00`);
-      const dayStr = date.toLocaleDateString("nl-NL", { weekday: "long" });
-      const dateStr = date.toLocaleDateString("nl-NL", {
-        day: "numeric",
-        month: "long",
-      });
-      lines.push(`${dateStr.padEnd(17)}${dayStr}`);
+  for (const row of rows) {
+    const icon = row.state === "available" ? "✅" : "⚡";
+    const newTag = row.isNew ? " 🆕" : "   ";
+    const dateLabel = formatDateNL(row.date).padEnd(24);
+    const slotLine = row.slots.length > 0 ? row.slots[0] : "—";
+    lines.push(`${icon}${newTag}${dateLabel}${slotLine}`);
+    for (let i = 1; i < row.slots.length; i++) {
+      lines.push(`         ${"".padEnd(24)}${row.slots[i]}`);
     }
-    lines.push("</pre>");
   }
 
+  lines.push("</pre>");
   return lines.join("\n");
 }
 
@@ -287,8 +271,7 @@ function buildMessage(newDates: string[], allAvailable: string[]): string {
 async function main(): Promise<void> {
   console.log("Fetching ACV trailer calendar…");
 
-  const session = await getSessionCookie();
-  console.log(`Session: ${session ? "obtained" : "none (proceeding anyway)"}`);
+  const sessionId = await getSession();
 
   const now = new Date();
   const thisYear = now.getFullYear();
@@ -297,46 +280,62 @@ async function main(): Promise<void> {
   const nextYear = thisMonth === 12 ? thisYear + 1 : thisYear;
 
   const [currentMonthDays, nextMonthDays] = await Promise.all([
-    fetchCalendarMonth(thisYear, thisMonth, session),
-    fetchCalendarMonth(nextYear, nextMonth, session),
+    fetchCalendarMonth(thisYear, thisMonth, sessionId),
+    fetchCalendarMonth(nextYear, nextMonth, sessionId),
   ]);
 
-  const allDays = [...currentMonthDays, ...nextMonthDays];
-  console.log(`Total days fetched: ${allDays.length}`);
-
   const { start, end } = getUpcomingDateRange();
-  const available = allDays
-    .filter((d) => {
-      if (!d.available) return false;
-      const date = new Date(`${d.date}T00:00:00`);
-      return date >= start && date < end;
-    })
-    .map((d) => d.date)
-    .sort();
 
-  console.log(`Available slots in next ${LOOKAHEAD_DAYS} days:`, available);
+  const upcomingAvailable = [...currentMonthDays, ...nextMonthDays].filter((d) => {
+    if (d.state !== "available" && d.state !== "semi") return false;
+    const date = new Date(`${d.date}T00:00:00`);
+    return date >= start && date < end;
+  });
 
-  const cache = loadCache();
-  const cachedSet = new Set(cache.availableDates);
-  const newDates = available.filter((d) => !cachedSet.has(d));
+  console.log(
+    `Days with availability in next ${LOOKAHEAD_DAYS} days:`,
+    upcomingAvailable.map((d) => `${d.date}(${d.state})`)
+  );
 
-  console.log("New slots (not in cache):", newDates);
+  // Build current availability map
+  const currentCache: Cache = {};
+  for (const day of upcomingAvailable) {
+    const availSlots = (day.parts ?? [])
+      .filter((p) => p.status === "available")
+      .map((p) => normalizeTime(p.text));
+    currentCache[day.date] = { state: day.state, slots: availSlots };
+  }
 
-  if (newDates.length === 0) {
-    console.log("No new slots found. Skipping Telegram notification.");
+  // Find dates/slots not seen before
+  const previousCache = loadCache();
+  const newOrUpdated = upcomingAvailable.filter((day) => {
+    const prev = previousCache[day.date];
+    if (!prev) return true; // new date
+    const prevSlots = new Set(prev.slots);
+    return currentCache[day.date].slots.some((s) => !prevSlots.has(s));
+  });
+
+  console.log("New/updated:", newOrUpdated.map((d) => d.date));
+
+  if (newOrUpdated.length === 0) {
+    console.log("No new slots. Skipping notification.");
   } else {
     if (!TELEGRAM_TOKEN || !TELEGRAM_CHAT_ID) {
-      console.error(
-        "TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID is not set. Cannot send notification."
-      );
+      console.error("TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID not set.");
     } else {
-      const message = buildMessage(newDates, available);
-      await sendTelegram(message);
-      console.log(`Telegram notification sent for ${newDates.length} new slot(s).`);
+      const newDates = new Set(newOrUpdated.map((d) => d.date));
+      const rows: SlotRow[] = upcomingAvailable.map((day) => ({
+        date: day.date,
+        state: day.state,
+        slots: currentCache[day.date].slots,
+        isNew: newDates.has(day.date),
+      }));
+      await sendTelegram(buildMessage(rows));
+      console.log(`Telegram sent for ${newOrUpdated.length} new/updated slot(s).`);
     }
   }
 
-  saveCache({ availableDates: available });
+  saveCache(currentCache);
   console.log("Cache updated.");
 }
 

@@ -41,6 +41,9 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          # Township ID — defaults to 16 (Ede). Override by adding a
+          # TOWNSHIP secret or changing the default in check-availability.ts.
+          TOWNSHIP: ${{ secrets.TOWNSHIP || '16' }}
         run: npm run check
 
       - name: Save availability cache

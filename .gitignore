@@ -2,3 +2,4 @@ node_modules/
 availability_cache.json
 *.js.map
 dist/
+.env

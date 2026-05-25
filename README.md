@@ -7,7 +7,7 @@ GitHub Action die elke 15 minuten de beschikbaarheid van ACV aanhangwagens contr
 1. Verkrijgt een sessie op de ACV website (PHPSESSID + gemeente activeren)
 2. Haalt de verhuurkalender op voor de huidige en volgende maand
 3. Filtert beschikbare en gedeeltelijk beschikbare datums in de komende 30 dagen
-4. Vergelijkt met de vorige controle (gecached in GitHub Actions)
+4. Vergelijkt met de vorige controle (opgeslagen in een GitHub Gist)
 5. Stuurt alleen een Telegram-bericht als er **nieuwe** tijdsloten zijn
 
 ## Datumstatussen
@@ -21,25 +21,32 @@ GitHub Action die elke 15 minuten de beschikbaarheid van ACV aanhangwagens contr
 
 ## Instellen
 
-### 1. Fork of clone deze repository
+### 1. Fork deze repository
 
-```bash
-gh repo fork jeffrey/acv-aanhanger
-```
+### 2. Maak een GitHub Gist aan (eenmalig)
 
-### 2. Voeg GitHub Secrets toe
+De cache wordt opgeslagen in een privé Gist zodat elke workflow-run de vorige staat kan lezen.
 
-Ga naar **Settings → Secrets and variables → Actions** en voeg toe:
+1. Ga naar https://gist.github.com
+2. Maak een **secret gist** aan met bestandsnaam `acv-availability-cache.json` en inhoud `{}`
+3. Kopieer de Gist ID uit de URL: `https://gist.github.com/<username>/<GIST_ID>`
+
+### 3. Voeg GitHub Secrets toe
+
+Ga naar **Settings → Secrets and variables → Actions**:
 
 | Secret | Verplicht | Waarde |
 |--------|-----------|--------|
 | `TELEGRAM_BOT_TOKEN` | ✅ | Token van je Telegram bot (via [@BotFather](https://t.me/BotFather)) |
 | `TELEGRAM_CHAT_ID` | ✅ | Jouw Telegram chat ID (via [@userinfobot](https://t.me/userinfobot)) |
+| `CACHE_GIST_ID` | ✅ | ID van de Gist die je in stap 2 aanmaakte |
 | `TOWNSHIP` | ❌ | Gemeente ID (standaard: `16` = Ede) |
 
-### 3. Zorg dat Actions aan staan
+> `GITHUB_TOKEN` wordt automatisch door Actions aangemaakt — hoef je niet toe te voegen.
 
-Ga naar de **Actions** tab in je repository en activeer workflows als dat nog niet het geval is.
+### 4. Activeer de workflow
+
+Ga naar de **Actions** tab en activeer workflows als dat nog niet het geval is.
 
 ## Gemeente IDs
 
@@ -52,26 +59,39 @@ Ga naar de **Actions** tab in je repository en activeer workflows als dat nog ni
 | 20 | Wageningen |
 | 38 | Scherpenzeel |
 
+## Lokaal testen
+
+Maak een `.env` bestand aan:
+
+```env
+TELEGRAM_BOT_TOKEN=your_token
+TELEGRAM_CHAT_ID=your_chat_id
+TOWNSHIP=16
+# optioneel voor lokaal testen met Gist:
+# GITHUB_TOKEN=your_pat
+# CACHE_GIST_ID=your_gist_id
+```
+
+Voer dan uit:
+
+```bash
+npm install
+npm run check
+```
+
+Zonder `CACHE_GIST_ID` slaat het script de cache lokaal op in `availability_cache.json`.
+
 ## Voorbeeld Telegram-bericht
 
 ```
 🚨 ACV Aanhanger — 2 nieuwe tijdslot(en) beschikbaar!
-Komende 14 dagen — volledig overzicht
+Komende 30 dagen — volledig overzicht
 
 Datum                   Tijdsloten
 ──────────────────────────────────────────────
-⚡ 🆕 vrijdag 5 juni        08:00 - 10:00
-✅ 🆕 maandag 8 juni        08:00 - 10:00
+⚡ 🆕 maandag 8 juni        13:00 - 15:00
+✅ 🆕 dinsdag 9 juni        08:00 - 10:00
                             10:30 - 12:30
                             13:00 - 15:00
-✅     dinsdag 9 juni        08:00 - 10:00
-                            10:30 - 12:30
-                            13:00 - 15:00
-```
-
-## Lokaal testen
-
-```bash
-npm install
-TELEGRAM_BOT_TOKEN=xxx TELEGRAM_CHAT_ID=yyy TOWNSHIP=16 npm run check
+✅     woensdag 10 juni      08:00 - 10:00
 ```

@@ -25,30 +25,12 @@ jobs:
       - name: Install dev dependencies
         run: npm ci
 
-      - name: Restore availability cache
-        uses: actions/cache@v4
-        with:
-          path: availability_cache.json
-          # Prefix key with date so the cache resets each day (preventing
-          # perpetually-cached old dates from blocking new-slot detection).
-          # `restore-keys` ensures we pick up the latest run's cache within
-          # the same day.
-          key: avail-cache-${{ runner.os }}-${{ github.run_id }}
-          restore-keys: |
-            avail-cache-${{ runner.os }}-
-
       - name: Run availability check
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          # Township ID — defaults to 16 (Ede). Override by adding a
-          # TOWNSHIP secret or changing the default in check-availability.ts.
           TOWNSHIP: ${{ secrets.TOWNSHIP || '16' }}
+          # Used to persist the availability cache between runs via a GitHub Gist
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CACHE_GIST_ID: ${{ secrets.CACHE_GIST_ID }}
         run: npm run check
-
-      - name: Save availability cache
-        if: always()
-        uses: actions/cache/save@v4
-        with:
-          path: availability_cache.json
-          key: avail-cache-${{ runner.os }}-${{ github.run_id }}

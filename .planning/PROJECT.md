@@ -49,7 +49,7 @@ Subscribers get notified the moment a new trailer slot appears — without havin
 
 ## Constraints
 
-- **Tech Stack**: Angular (frontend), AWS CDK + Lambda (backend/infra), DynamoDB (data), Amazon SES (email) — chosen
+- **Tech Stack**: Angular 21+ (frontend), AWS CDK + Lambda (backend/infra), DynamoDB (data), Amazon SES (email) — chosen
 - **Hosting**: AWS — all infra must be deployable via `cdk deploy`
 - **Email delivery**: SES requires domain/email verification before sending; must be handled in setup
 - **ACV API**: No official API — scraping-based session acquisition; fragile if ACV changes their site
@@ -59,7 +59,7 @@ Subscribers get notified the moment a new trailer slot appears — without havin
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Angular for frontend | User specified | — Pending |
+| Angular 21+ for frontend | User specified; modern signals-based reactivity, latest Angular features | — Pending |
 | AWS CDK + Lambda | User specified — serverless, no server management | — Pending |
 | DynamoDB for subscribers | Pairs naturally with Lambda, serverless, low ops overhead | — Pending |
 | Amazon SES for email | Native AWS, cheapest, CDK native support | — Pending |

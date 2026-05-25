@@ -828,7 +828,13 @@ cdk synth      # produces CloudFormation templates in cdk.out/
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
+
+### Resolutions (confirmed by developer, 2026-05-25)
+
+1. **Domain ownership**: Developer does NOT own `acv-aanhanger.nl` yet. Use `Identity.email()` for a verified sender email address during development. Plan 01-03 updated accordingly. Migrate to domain identity before go-live.
+2. **Target AWS region**: `eu-central-1` (Frankfurt). All CDK stacks deploy to this region. Note: ACM cert for CloudFront (Phase 4) must still be created in `us-east-1`.
+3. **CDK bootstrap status**: Not bootstrapped. Plan 01-01 adds `cdk bootstrap` as Task 1 (before any synth or deploy).
 
 1. **Domain ownership and registrar access**
    - What we know: The project sends from `noreply@acv-aanhanger.nl`

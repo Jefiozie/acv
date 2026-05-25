@@ -66,6 +66,8 @@ Subscribers get notified the moment a new trailer slot appears — without havin
 | Amazon SES for email | Native AWS, cheapest, CDK native support | — Pending |
 | Subscribe-only v1 (no dashboard) | Keep scope tight for first release | — Pending |
 | Per-township availability cache in DynamoDB | Multiple townships now needed; file-based cache won't scale | — Pending |
+| Email identity (not domain) for SES initially | Developer does not yet own acv-aanhanger.nl; use verified email for dev/staging, migrate to domain before go-live | — Pending |
+| AWS region: eu-central-1 (Frankfurt) | Lower latency for Dutch users; confirmed before CDK bootstrap | — Pending |
 
 ## Evolution
 

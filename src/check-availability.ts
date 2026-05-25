@@ -1,6 +1,16 @@
 import { readFileSync, writeFileSync, existsSync } from "fs";
 import { request } from "https";
 
+// Load .env locally if present (ignored in CI where secrets come from environment)
+if (existsSync(".env")) {
+  for (const line of readFileSync(".env", "utf8").split("\n")) {
+    const match = line.match(/^\s*([A-Z_][A-Z0-9_]*)=(.*)$/);
+    if (match && !process.env[match[1]]) {
+      process.env[match[1]] = match[2].replace(/^["']|["']$/g, "").trim();
+    }
+  }
+}
+
 // ─── Config ──────────────────────────────────────────────────────────────────
 
 const RENTAL_PAGE_URL =

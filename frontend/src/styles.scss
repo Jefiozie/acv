@@ -1,48 +1,120 @@
-/* ── Design tokens ─────────────────────────────────────────────────────── */
+// ╔══════════════════════════════════════════════════════════════════════════╗
+// ║  THEME SYSTEM                                                            ║
+// ║  • Add data-theme="dark" to <html> to force dark mode                   ║
+// ║  • Add data-theme="light" to force light mode                           ║
+// ║  • Without attribute, follows prefers-color-scheme                      ║
+// ╚══════════════════════════════════════════════════════════════════════════╝
+
+// ── Non-color tokens (shared across all themes) ──────────────────────────────
 :root {
-  --font:         'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font:         'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-display: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
 
-  /* Brand — Stripe indigo */
-  --c-primary:        #635BFF;
-  --c-primary-dark:   #4F46E5;
-  --c-primary-ring:   rgba(99, 91, 255, .18);
-  --c-primary-tint:   #F0EFFF;
-  --c-primary-tint2:  #E3E2FF;
+  --r-sm:   4px;
+  --r-md:   8px;
+  --r-lg:   12px;
+  --r-xl:   16px;
+  --r-pill: 100px;
 
-  /* Surface — Stripe cool light */
-  --c-bg:             #F6F9FC;
-  --c-surface:        #FFFFFF;
-  --c-border:         #E3E8EF;
-  --c-border-hover:   #C1CBE0;
-
-  /* Text — Stripe deep navy */
-  --c-text:           #0A2540;
-  --c-text-muted:     #425466;
-  --c-text-light:     #697386;
-
-  /* Feedback */
-  --c-success:        #0E9E6B;
-  --c-success-bg:     #ECFDF5;
-  --c-success-border: #A7F3D0;
-  --c-error:          #DF1B41;
-  --c-error-bg:       #FFF0F3;
-  --c-error-border:   #FECDD3;
-
-  /* Shadows */
-  --shadow-sm: 0 1px 4px rgba(10,37,64,.05), 0 1px 2px rgba(10,37,64,.03);
-  --shadow-md: 0 4px 16px rgba(10,37,64,.08), 0 2px 4px rgba(10,37,64,.04);
-  --shadow-lg: 0 16px 48px rgba(10,37,64,.10), 0 4px 8px rgba(10,37,64,.04);
-
-  /* Radii */
-  --r-sm:  3px;
-  --r-md:  6px;
-  --r-lg:  8px;
-  --r-xl:  12px;
-
-  /* Easing */
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
   --ease-out-expo:  cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+// ── Light theme ───────────────────────────────────────────────────────────────
+@mixin color-scheme-light {
+  // Brand
+  --c-primary:        #635BFF;
+  --c-primary-dark:   #4F46E5;
+  --c-primary-ring:   rgba(99, 91, 255, .15);
+  --c-primary-tint:   #F0EFFF;
+  --c-primary-tint2:  #E3E2FF;
+  --c-gradient-from:  #635BFF;
+  --c-gradient-to:    #8B5CF6;
+
+  // Surfaces
+  --c-bg:             #FFFFFF;
+  --c-surface:        #FFFFFF;
+  --c-surface-raised: #F4F5FF;
+  --c-header-bg:      rgba(255, 255, 255, .85);
+  --c-border:         #E8ECF4;
+  --c-border-hover:   #C5CBE0;
+
+  // Text
+  --c-text:           #0A1628;
+  --c-text-muted:     #4A5568;
+  --c-text-light:     #94A3B8;
+
+  // Feedback
+  --c-success:        #059669;
+  --c-success-bg:     #ECFDF5;
+  --c-success-border: #A7F3D0;
+  --c-error:          #DC2626;
+  --c-error-bg:       #FFF1F2;
+  --c-error-border:   #FECDD3;
+
+  // Shadows
+  --shadow-sm:    0 1px 4px rgba(10,37,64,.05), 0 1px 2px rgba(10,37,64,.03);
+  --shadow-md:    0 4px 16px rgba(10,37,64,.08), 0 2px 4px rgba(10,37,64,.04);
+  --shadow-lg:    0 16px 48px rgba(10,37,64,.10), 0 4px 8px rgba(10,37,64,.04);
+  --card-shadow:  0 1px 3px rgba(10,37,64,.04),
+                  0 8px 32px rgba(99,91,255,.08),
+                  0 0 0 1px rgba(99,91,255,.06);
+
+  // Background orbs
+  --bg-orb-1:     rgba(99, 91, 255, .06);
+  --bg-orb-2:     rgba(139, 92, 246, .04);
+}
+
+// ── Dark theme ────────────────────────────────────────────────────────────────
+@mixin color-scheme-dark {
+  // Brand
+  --c-primary:        #7C75FF;
+  --c-primary-dark:   #635BFF;
+  --c-primary-ring:   rgba(124, 117, 255, .22);
+  --c-primary-tint:   rgba(124, 117, 255, .1);
+  --c-primary-tint2:  rgba(124, 117, 255, .16);
+  --c-gradient-from:  #7C75FF;
+  --c-gradient-to:    #A78BFA;
+
+  // Surfaces
+  --c-bg:             #0C0E14;
+  --c-surface:        #13161E;
+  --c-surface-raised: #1A1D28;
+  --c-header-bg:      rgba(12, 14, 20, .85);
+  --c-border:         #252836;
+  --c-border-hover:   #363A4F;
+
+  // Text
+  --c-text:           #E2E8F0;
+  --c-text-muted:     #94A3B8;
+  --c-text-light:     #64748B;
+
+  // Feedback
+  --c-success:        #10B981;
+  --c-success-bg:     rgba(16, 185, 129, .1);
+  --c-success-border: rgba(16, 185, 129, .25);
+  --c-error:          #F87171;
+  --c-error-bg:       rgba(248, 113, 113, .1);
+  --c-error-border:   rgba(248, 113, 113, .25);
+
+  // Shadows
+  --shadow-sm:    0 1px 4px rgba(0,0,0,.3);
+  --shadow-md:    0 4px 16px rgba(0,0,0,.4);
+  --shadow-lg:    0 16px 48px rgba(0,0,0,.5);
+  --card-shadow:  0 1px 3px rgba(0,0,0,.3),
+                  0 8px 32px rgba(0,0,0,.4),
+                  0 0 0 1px rgba(255,255,255,.05);
+
+  // Background orbs
+  --bg-orb-1:     rgba(124, 117, 255, .1);
+  --bg-orb-2:     rgba(167, 139, 250, .05);
+}
+
+// ── Apply themes ──────────────────────────────────────────────────────────────
+:root, [data-theme="light"] { @include color-scheme-light; }
+[data-theme="dark"]         { @include color-scheme-dark; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { @include color-scheme-dark; }
 }
 
 /* ── Reset ─────────────────────────────────────────────────────────────── */
@@ -52,6 +124,10 @@ html {
   font-family: var(--font);
   font-size: 16px;
   background: var(--c-bg);
+  background-image:
+    radial-gradient(ellipse 80vw 60vh at 90% -10%, var(--bg-orb-1) 0%, transparent 65%),
+    radial-gradient(ellipse 50vw 50vh at -5% 85%, var(--bg-orb-2) 0%, transparent 65%);
+  background-attachment: fixed;
   color: var(--c-text);
   -webkit-text-size-adjust: 100%;
 }
@@ -220,10 +296,10 @@ ul { padding-left: 1.5rem; li { margin-bottom: 4px; } }
   text-decoration: none;
 
   &--primary {
-    background: var(--c-primary);
+    background: linear-gradient(135deg, var(--c-gradient-from) 0%, var(--c-gradient-to) 100%);
     color: #fff;
     &:hover:not(:disabled) {
-      background: var(--c-primary-dark);
+      opacity: .88;
       box-shadow: var(--shadow-md);
       transform: translateY(-2px);
     }

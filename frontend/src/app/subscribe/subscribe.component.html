@@ -1,71 +1,57 @@
-<article class="subscribe-page">
+<div class="subscribe-page">
 
-  <!-- ── Editorial panel ───────────────────────────────────────── -->
-  <div class="subscribe-page__editorial">
-    <p class="editorial-eyebrow">Gratis meldingsdienst</p>
+  @if (state() === 'success') {
+    <div class="subscribe-success" role="status">
+      <p class="subscribe-success__icon" aria-hidden="true">✉️</p>
+      <h2 class="subscribe-success__title">Check je inbox!</h2>
+      <p class="subscribe-success__body">
+        We stuurden je een bevestigingsmail. Activeer je aanmelding via de link.
+      </p>
+      <ol class="subscribe-success__steps">
+        <li>
+          <span class="step-num" aria-hidden="true">01</span>
+          Open de bevestigingsmail van ACV Aanhanger
+        </li>
+        <li>
+          <span class="step-num" aria-hidden="true">02</span>
+          Klik op <strong>Bevestig aanmelding</strong>
+        </li>
+        <li>
+          <span class="step-num" aria-hidden="true">03</span>
+          Klaar — wij laten je weten als er een slot vrijkomt
+        </li>
+      </ol>
+    </div>
 
-    <h1 class="editorial-headline">
-      Als eerste weten<br>
-      dat er een aanhanger<br>
-      <em>beschikbaar is.</em>
-    </h1>
+  } @else {
 
-    <p class="editorial-body">
-      Laat je e-mailadres achter. Zodra er een aanhanger vrij is in jouw gemeente,
-      sturen wij je direct een bericht. Gratis, geen spam.
-    </p>
-
-    <ol class="editorial-steps" aria-label="Zo werkt het">
-      <li>
-        <span class="editorial-step-num" aria-hidden="true">01</span>
-        <span>Vul je gegevens in</span>
-      </li>
-      <li>
-        <span class="editorial-step-num" aria-hidden="true">02</span>
-        <span>Bevestig via e-mail</span>
-      </li>
-      <li>
-        <span class="editorial-step-num" aria-hidden="true">03</span>
-        <span>Ontvang een melding bij een vrij slot</span>
-      </li>
-    </ol>
-  </div>
-
-  <!-- ── Form panel ────────────────────────────────────────────── -->
-  <div class="subscribe-page__form-panel">
-
-    @if (state() === 'success') {
-      <div class="subscribe-success" role="status">
-        <p class="subscribe-success__icon" aria-hidden="true">✉️</p>
-        <h2 class="subscribe-success__title">Check je inbox!</h2>
-        <p class="subscribe-success__body">
-          We stuurden je een bevestigingsmail. Activeer je aanmelding via de link.
-        </p>
-        <ol class="subscribe-success__steps">
-          <li>
-            <span class="editorial-step-num" aria-hidden="true">01</span>
-            Open de bevestigingsmail van ACV Aanhanger
-          </li>
-          <li>
-            <span class="editorial-step-num" aria-hidden="true">02</span>
-            Klik op <strong>Bevestig aanmelding</strong>
-          </li>
-          <li>
-            <span class="editorial-step-num" aria-hidden="true">03</span>
-            Klaar — wij laten je weten als er een slot vrijkomt
-          </li>
-        </ol>
+    <div class="subscribe-hero">
+      <div class="trust-badges" aria-hidden="true">
+        <span class="trust-badge">✓ Gratis</span>
+        <span class="trust-badge">🔒 Geen spam</span>
+        <span class="trust-badge">⚡ Direct bericht</span>
       </div>
 
-    } @else {
+      <h1 class="subscribe-headline">
+        Als eerste weten<br>
+        als er een aanhanger<br>
+        <em>beschikbaar is</em>
+      </h1>
 
-      @if (state() === 'error') {
-        <div class="inline-alert inline-alert--error" role="alert">
-          <span aria-hidden="true">⚠️</span>
-          Er is iets misgegaan. Probeer het opnieuw of neem contact op.
-        </div>
-      }
+      <p class="subscribe-subline">
+        Laat je e-mailadres achter. Wij sturen je direct een bericht
+        zodra er een vrij slot is in jouw gemeente.
+      </p>
+    </div>
 
+    @if (state() === 'error') {
+      <div class="inline-alert inline-alert--error" role="alert">
+        <span aria-hidden="true">⚠️</span>
+        Er is iets misgegaan. Probeer het opnieuw of neem contact op.
+      </div>
+    }
+
+    <div class="subscribe-card">
       <form (submit)="onSubmit($event)" class="subscribe-form" novalidate>
 
         <div class="form-field">
@@ -158,8 +144,7 @@
         Door je aan te melden ga je akkoord met ons <a routerLink="/privacy">privacybeleid</a>.
         Je kunt je altijd uitschrijven via de link in de e-mail.
       </p>
+    </div>
 
-    }
-  </div>
-
-</article>
+  }
+</div>

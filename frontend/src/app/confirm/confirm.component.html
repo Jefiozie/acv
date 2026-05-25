@@ -1,0 +1,20 @@
+<main class="page-container">
+  <h1>Aanmelding bevestigen</h1>
+
+  @if (state() === 'loading') {
+    <p aria-live="polite">Bezig…</p>
+  }
+
+  @if (state() === 'success') {
+    <p role="status">Je aanmelding is bevestigd!</p>
+    <p>Je ontvangt voortaan een melding als er een aanhanger beschikbaar is.</p>
+  }
+
+  @if (state() === 'error') {
+    <p role="alert">
+      Ongeldige of verlopen bevestigingslink. Vraag een nieuwe bevestigingsmail
+      aan via de aanmeldpagina.
+    </p>
+    <a routerLink="/">Terug naar aanmelden</a>
+  }
+</main>

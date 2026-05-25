@@ -1,0 +1,17 @@
+<main class="page-container">
+  <h1>Uitschrijven</h1>
+
+  @if (state() === 'loading') {
+    <p aria-live="polite">Bezig…</p>
+  }
+
+  @if (state() === 'success') {
+    <p role="status">Je bent uitgeschreven.</p>
+    <p>Je ontvangt geen meldingen meer van de ACV Aanhanger service.</p>
+  }
+
+  @if (state() === 'error') {
+    <p role="alert">Dit uitschrijflink is al gebruikt of ongeldig.</p>
+    <a routerLink="/">Terug naar aanmelden</a>
+  }
+</main>

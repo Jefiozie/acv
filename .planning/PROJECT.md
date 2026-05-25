@@ -27,6 +27,7 @@ Subscribers get notified the moment a new trailer slot appears — without havin
 - [ ] AWS Lambda subscription API (subscribe/unsubscribe endpoints)
 - [ ] DynamoDB subscriber store (email + township + confirmed status)
 - [ ] Email notifications via Amazon SES when new slots detected
+- [ ] Per-subscriber notification frequency: immediately (every checker run) or daily digest
 - [ ] Per-township checker: run availability check for each unique subscribed township
 - [ ] AWS CDK infrastructure (all resources defined as code)
 

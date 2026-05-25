@@ -2,8 +2,9 @@ name: Check ACV Trailer Availability
 
 on:
   schedule:
-    # Every 15 minutes
-    - cron: "*/15 * * * *"
+    # Twice a day: 08:00 and 18:00 UTC
+    - cron: "0 8 * * *"
+    - cron: "0 18 * * *"
   # Allow manual trigger for testing
   workflow_dispatch:
 

@@ -1,20 +1,2 @@
-.page-container {
-  max-width: 640px;
-  margin: 2rem auto;
-  padding: 0 1rem;
-  font-size: 1rem;
-  line-height: 1.6;
-
-  h1 {
-    margin-bottom: 1.25rem;
-  }
-
-  p {
-    margin-bottom: 1rem;
-  }
-
-  a {
-    color: inherit;
-    text-decoration: underline;
-  }
-}
+:host { display: block; }
+.page-card { max-width: 480px; margin: 0 auto; }

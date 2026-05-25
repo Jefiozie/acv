@@ -1,17 +1,35 @@
-<main class="page-container">
-  <h1>Uitschrijven</h1>
-
+<div class="page-card">
   @if (state() === 'loading') {
-    <p aria-live="polite">Bezig…</p>
+    <div class="state-card" aria-live="polite" aria-busy="true">
+      <div class="state-card__icon" aria-hidden="true">⏳</div>
+      <p class="state-card__title">Bezig…</p>
+      <p class="state-card__body">We verwerken je uitschrijving.</p>
+    </div>
   }
 
   @if (state() === 'success') {
-    <p role="status">Je bent uitgeschreven.</p>
-    <p>Je ontvangt geen meldingen meer van de ACV Aanhanger service.</p>
+    <div class="state-card state-card--success" role="status">
+      <div class="state-card__icon" aria-hidden="true">👋</div>
+      <h1 class="state-card__title">Je bent uitgeschreven</h1>
+      <p class="state-card__body">
+        Je ontvangt geen meldingen meer van de ACV Aanhanger service. Je gegevens zijn permanent verwijderd.
+      </p>
+      <div class="state-card__actions">
+        <a routerLink="/" class="btn btn--ghost">← Opnieuw aanmelden</a>
+      </div>
+    </div>
   }
 
   @if (state() === 'error') {
-    <p role="alert">Dit uitschrijflink is al gebruikt of ongeldig.</p>
-    <a routerLink="/">Terug naar aanmelden</a>
+    <div class="state-card state-card--error" role="alert">
+      <div class="state-card__icon" aria-hidden="true">❌</div>
+      <h1 class="state-card__title">Link al gebruikt</h1>
+      <p class="state-card__body">
+        Dit uitschrijflink is al gebruikt of ongeldig. Mogelijk ben je al uitgeschreven.
+      </p>
+      <div class="state-card__actions">
+        <a routerLink="/" class="btn btn--ghost">← Naar aanmeldpagina</a>
+      </div>
+    </div>
   }
-</main>
+</div>

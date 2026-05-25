@@ -1,20 +1,35 @@
-<main class="page-container">
-  <h1>Aanmelding bevestigen</h1>
-
+<div class="page-card">
   @if (state() === 'loading') {
-    <p aria-live="polite">Bezig…</p>
+    <div class="state-card" aria-live="polite" aria-busy="true">
+      <div class="state-card__icon" aria-hidden="true">⏳</div>
+      <p class="state-card__title">Bezig…</p>
+      <p class="state-card__body">We verwerken je bevestiging.</p>
+    </div>
   }
 
   @if (state() === 'success') {
-    <p role="status">Je aanmelding is bevestigd!</p>
-    <p>Je ontvangt voortaan een melding als er een aanhanger beschikbaar is.</p>
+    <div class="state-card state-card--success" role="status">
+      <div class="state-card__icon" aria-hidden="true">✅</div>
+      <h1 class="state-card__title">Je aanmelding is bevestigd!</h1>
+      <p class="state-card__body">
+        Je ontvangt voortaan een melding zodra er een aanhanger beschikbaar is in jouw gemeente.
+      </p>
+      <div class="state-card__actions">
+        <a routerLink="/" class="btn btn--ghost">← Terug naar aanmelden</a>
+      </div>
+    </div>
   }
 
   @if (state() === 'error') {
-    <p role="alert">
-      Ongeldige of verlopen bevestigingslink. Vraag een nieuwe bevestigingsmail
-      aan via de aanmeldpagina.
-    </p>
-    <a routerLink="/">Terug naar aanmelden</a>
+    <div class="state-card state-card--error" role="alert">
+      <div class="state-card__icon" aria-hidden="true">❌</div>
+      <h1 class="state-card__title">Link niet geldig</h1>
+      <p class="state-card__body">
+        Ongeldige of verlopen bevestigingslink. Vraag een nieuwe bevestigingsmail aan via de aanmeldpagina.
+      </p>
+      <div class="state-card__actions">
+        <a routerLink="/" class="btn btn--primary">Opnieuw aanmelden</a>
+      </div>
+    </div>
   }
-</main>
+</div>

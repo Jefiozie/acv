@@ -1,156 +1,53 @@
-/* ── Subscribe section ─────────────────────────────────────────────────── */
-.subscribe-section {
-  max-width: 100%;
-  padding: 1rem;
-  box-sizing: border-box;
+.subscribe-card {
+  max-width: 480px;
+  margin: 0 auto;
+  background: var(--c-surface);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
 
-  &__heading {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
+  &__hero {
+    background: linear-gradient(145deg, var(--c-primary-tint) 0%, var(--c-primary-tint2) 100%);
+    border-bottom: 1px solid #FED7AA;
+    padding: 36px 32px 28px;
+    text-align: center;
   }
 
-  &__intro {
-    margin-bottom: 1.5rem;
-    color: #444;
+  &__icon { font-size: 3rem; line-height: 1; margin-bottom: 12px; }
+
+  &__title {
+    font-size: 1.625rem;
+    font-weight: 700;
+    margin-bottom: 8px;
   }
 
-  &__success {
-    padding: 1rem;
-    border: 2px solid #1a7f37;
-    border-radius: 4px;
-    background: #f0fff4;
-    color: #1a7f37;
+  &__subtitle {
+    color: var(--c-text-muted);
+    font-size: .9375rem;
+    line-height: 1.5;
   }
 
-  &__error {
-    padding: 1rem;
-    border: 2px solid #c0392b;
-    border-radius: 4px;
-    background: #fdf2f0;
-    color: #c0392b;
-  }
-
-  &__privacy {
-    margin-top: 1rem;
-    font-size: 0.875rem;
-
-    a {
-      color: #005fcc;
-      text-decoration: underline;
-    }
+  &__footer {
+    text-align: center;
+    padding: 16px 32px 24px;
+    font-size: .8125rem;
+    color: var(--c-text-muted);
+    a { color: var(--c-text-muted); font-weight: 500; }
   }
 }
 
-/* ── Subscribe form ─────────────────────────────────────────────────────── */
 .subscribe-form {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
-
-  &__field {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  &__label {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 4px;
-  }
-
-  /* Minimum 16px font prevents iOS auto-zoom on focus */
-  &__input,
-  &__select {
-    display: block;
-    width: 100%;
-    box-sizing: border-box;
-    min-height: 44px; /* WCAG touch target */
-    font-size: 1rem; /* ≥ 16px */
-    padding: 0.5rem 0.75rem;
-    border: 2px solid #767676;
-    border-radius: 4px;
-    background: #fff;
-    color: #111;
-    appearance: auto;
-
-    &:focus {
-      outline: 3px solid #005fcc;
-      outline-offset: 2px;
-    }
-  }
-
-  &__error {
-    color: #c0392b; /* contrast ≥ 4.5:1 on white: #c0392b is 4.6:1 */
-    font-size: 0.875rem;
-    margin: 2px 0 0;
-  }
-
-  /* ── Fieldset for radios ── */
-  &__fieldset {
-    border: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  &__legend {
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    padding: 0;
-  }
-
-  /* Touch-friendly radio labels: min 44px height */
-  &__radio-label {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    min-height: 44px;
-    cursor: pointer;
-  }
-
-  &__radio {
-    width: 1.25rem;
-    height: 1.25rem;
-    cursor: pointer;
-    accent-color: #005fcc;
-  }
-
-  /* ── Submit button ── */
-  &__submit {
-    align-self: flex-start;
-    min-height: 44px;
-    min-width: 120px;
-    padding: 0.5rem 1.5rem;
-    font-size: 1rem;
-    font-weight: 600;
-    background: #005fcc;
-    color: #fff;
-    border: 2px solid #005fcc;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background 0.15s ease, border-color 0.15s ease;
-
-    &:hover:not(:disabled) {
-      background: #004999;
-      border-color: #004999;
-    }
-
-    &:focus {
-      outline: 3px solid #005fcc;
-      outline-offset: 2px;
-    }
-
-    &:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-  }
+  gap: 20px;
+  padding: 28px 32px 24px;
 }
 
-/* ── Wider viewport ─────────────────────────────────────────────────────── */
-@media (min-width: 640px) {
-  .subscribe-section {
-    max-width: 480px;
-    margin: 0 auto;
+/* Mobile adjustments */
+@media (max-width: 520px) {
+  .subscribe-card {
+    border-radius: var(--r-lg);
+    &__hero { padding: 28px 20px 22px; }
   }
+  .subscribe-form { padding: 24px 20px 20px; }
 }

@@ -1,13 +1,22 @@
 
-<header>
-  <nav>
-    <a routerLink="/">ACV Aanhanger Beschikbaarheid</a>
-  </nav>
-</header>
-<main>
-  <router-outlet />
-</main>
-<footer>
-  <a routerLink="/privacy">Privacybeleid</a>
-</footer>
+<div class="app-shell">
+  <header class="app-header">
+    <div class="app-header__inner">
+      <a routerLink="/" class="app-header__brand">
+        <span class="app-header__icon" aria-hidden="true">🚐</span>
+        <span class="app-header__name">ACV&nbsp;<strong>Aanhanger</strong></span>
+      </a>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <router-outlet />
+  </main>
+
+  <footer class="app-footer">
+    <a routerLink="/privacy">Privacybeleid</a>
+    <span aria-hidden="true">·</span>
+    <span>ACV Groep</span>
+  </footer>
+</div>
 

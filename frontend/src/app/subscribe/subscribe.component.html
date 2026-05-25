@@ -1,118 +1,120 @@
-<section class="subscribe-section">
-  <h1 class="subscribe-section__heading">Aanmelden aanhanger meldingen</h1>
-  <p class="subscribe-section__intro">
-    Ontvang een melding wanneer de aanhanger beschikbaar is in jouw gemeente.
-  </p>
+<div class="subscribe-card">
+
+  <!-- Hero -->
+  <div class="subscribe-card__hero">
+    <div class="subscribe-card__icon" aria-hidden="true">🚐</div>
+    <h1 class="subscribe-card__title">Aanhanger vrij?</h1>
+    <p class="subscribe-card__subtitle">
+      Ontvang direct een melding zodra er een aanhanger beschikbaar is in jouw gemeente.
+    </p>
+  </div>
 
   @if (state() === 'success') {
-    <p role="status" class="subscribe-section__success">
-      Check je inbox voor een bevestigingsmail.
-    </p>
-  }
+    <div class="state-card state-card--success" role="status">
+      <div class="state-card__icon" aria-hidden="true">✉️</div>
+      <p class="state-card__title">Check je inbox!</p>
+      <p class="state-card__body">
+        We stuurden je een bevestigingsmail. Klik op de link om je aanmelding te activeren.
+      </p>
+    </div>
 
-  @if (state() === 'error') {
-    <p role="alert" class="subscribe-section__error">
-      Er is iets misgegaan. Probeer het opnieuw of neem contact op.
-    </p>
-  }
+  } @else {
 
-  @if (state() !== 'success') {
+    @if (state() === 'error') {
+      <div class="inline-alert inline-alert--error" role="alert">
+        <span aria-hidden="true">⚠️</span>
+        Er is iets misgegaan. Probeer het opnieuw of neem contact op.
+      </div>
+    }
+
     <form (submit)="onSubmit($event)" class="subscribe-form" novalidate>
 
-      <!-- Email -->
-      <div class="subscribe-form__field">
-        <label class="subscribe-form__label" for="email">E-mailadres</label>
+      <div class="form-field">
+        <label class="form-label" for="email">E-mailadres</label>
         <input
           id="email"
           type="email"
-          class="subscribe-form__input"
+          class="form-input"
           [formField]="emailField"
           aria-required="true"
           aria-describedby="email-error"
           autocomplete="email"
+          placeholder="naam@voorbeeld.nl"
         />
         @if (emailField().invalid() && emailField().touched()) {
-          <p id="email-error" role="alert" class="subscribe-form__error">
-            Voer een geldig e-mailadres in.
+          <p id="email-error" class="form-error" role="alert">
+            <span aria-hidden="true">⚠</span> Voer een geldig e-mailadres in.
           </p>
         }
       </div>
 
-      <!-- Township -->
-      <div class="subscribe-form__field">
-        <label class="subscribe-form__label" for="township">Gemeente</label>
-        <select
-          id="township"
-          class="subscribe-form__select"
-          [formField]="townshipIdField"
-          aria-required="true"
-          aria-describedby="township-error"
-        >
-          <option value="">Kies een gemeente</option>
-          @for (t of townships; track t.id) {
-            <option [value]="t.id">{{ t.name }}</option>
-          }
-        </select>
+      <div class="form-field">
+        <label class="form-label" for="township">Gemeente</label>
+        <div class="form-select-wrap">
+          <select
+            id="township"
+            class="form-select"
+            [formField]="townshipIdField"
+            aria-required="true"
+            aria-describedby="township-error"
+          >
+            <option value="">Kies een gemeente…</option>
+            @for (t of townships; track t.id) {
+              <option [value]="t.id">{{ t.name }}</option>
+            }
+          </select>
+        </div>
         @if (townshipIdField().invalid() && townshipIdField().touched()) {
-          <p id="township-error" role="alert" class="subscribe-form__error">
-            Selecteer een gemeente.
+          <p id="township-error" class="form-error" role="alert">
+            <span aria-hidden="true">⚠</span> Selecteer een gemeente.
           </p>
         }
       </div>
 
-      <!-- Frequency -->
-      <div class="subscribe-form__field">
-        <fieldset class="subscribe-form__fieldset">
-          <legend class="subscribe-form__legend">
-            Hoe vaak wil je een melding?
-          </legend>
-          <label class="subscribe-form__radio-label">
-            <input
-              type="radio"
-              class="subscribe-form__radio"
-              [formField]="frequencyField"
-              value="immediate"
-              aria-describedby="frequency-error"
-            />
-            Meteen
+      <fieldset class="form-fieldset">
+        <legend class="form-label">Wanneer wil je een melding?</legend>
+        <div class="form-radios">
+          <label class="form-radio-option">
+            <input type="radio" [formField]="frequencyField" value="immediate" aria-describedby="frequency-error" />
+            <span class="option-text">
+              <strong>Meteen</strong>
+              <small>Zodra er een slot vrijkomt</small>
+            </span>
           </label>
-          <label class="subscribe-form__radio-label">
-            <input
-              type="radio"
-              class="subscribe-form__radio"
-              [formField]="frequencyField"
-              value="daily"
-              aria-describedby="frequency-error"
-            />
-            Dagelijks overzicht
+          <label class="form-radio-option">
+            <input type="radio" [formField]="frequencyField" value="daily" aria-describedby="frequency-error" />
+            <span class="option-text">
+              <strong>Dagelijks overzicht</strong>
+              <small>Elke dag een samenvatting</small>
+            </span>
           </label>
-        </fieldset>
+        </div>
         @if (frequencyField().invalid() && frequencyField().touched()) {
-          <p id="frequency-error" role="alert" class="subscribe-form__error">
-            Kies een meldingsfrequentie.
+          <p id="frequency-error" class="form-error" role="alert">
+            <span aria-hidden="true">⚠</span> Kies een meldingsfrequentie.
           </p>
         }
-      </div>
+      </fieldset>
 
-      <!-- Submit -->
       <button
         type="submit"
-        class="subscribe-form__submit"
+        class="btn btn--primary btn--full"
         [disabled]="subscribeForm().invalid() || state() === 'loading'"
         [attr.aria-busy]="state() === 'loading'"
       >
         @if (state() === 'loading') {
-          Bezig met aanmelden&hellip;
+          <span class="btn-spinner" aria-hidden="true"></span>
+          Bezig met aanmelden…
         } @else {
-          Aanmelden
+          Aanmelden <span aria-hidden="true">→</span>
         }
       </button>
 
     </form>
 
-    <!-- Privacy link -->
-    <p class="subscribe-section__privacy">
-      <a routerLink="/privacy">Privacybeleid</a>
+    <p class="subscribe-card__footer">
+      Door je aan te melden ga je akkoord met ons <a routerLink="/privacy">privacybeleid</a>.
     </p>
+
   }
-</section>
+</div>

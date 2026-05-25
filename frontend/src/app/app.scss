@@ -11,6 +11,7 @@
   top: 0;
   z-index: 100;
   box-shadow: var(--shadow-sm);
+  animation: fade-in 300ms var(--ease-out-quart) both;
 
   &__inner {
     max-width: 680px;

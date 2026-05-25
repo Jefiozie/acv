@@ -38,6 +38,10 @@
   --r-md:  10px;
   --r-lg:  16px;
   --r-xl:  20px;
+
+  /* Easing */
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-expo:  cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ── Reset ─────────────────────────────────────────────────────────────── */
@@ -107,7 +111,7 @@ ul { padding-left: 1.5rem; li { margin-bottom: 4px; } }
   color: var(--c-text);
   border: 1.5px solid var(--c-border);
   border-radius: var(--r-md);
-  transition: border-color .15s, box-shadow .15s;
+  transition: border-color .2s var(--ease-out-quart), box-shadow .2s var(--ease-out-quart);
   appearance: none;
 
   &::placeholder { color: var(--c-text-light); }
@@ -142,6 +146,7 @@ ul { padding-left: 1.5rem; li { margin-bottom: 4px; } }
   display: flex;
   align-items: center;
   gap: 4px;
+  animation: slide-down 160ms var(--ease-out-quart) both;
 }
 
 .form-hint {
@@ -170,13 +175,16 @@ ul { padding-left: 1.5rem; li { margin-bottom: 4px; } }
   padding: 10px 12px;
   border-radius: var(--r-sm);
   cursor: pointer;
-  border: 1.5px solid transparent;
-  transition: background .15s, border-color .15s;
+  transition: background .2s var(--ease-out-quart), border-color .2s, transform .2s var(--ease-out-quart), box-shadow .2s;
 
-  &:hover { background: var(--c-primary-tint); }
+  &:hover {
+    background: var(--c-primary-tint);
+    transform: translateX(3px);
+  }
   &:has(input:checked) {
     background: var(--c-primary-tint);
     border-color: var(--c-primary);
+    transform: translateX(3px);
   }
 
   input[type="radio"] {
@@ -207,7 +215,7 @@ ul { padding-left: 1.5rem; li { margin-bottom: 4px; } }
   border: none;
   border-radius: var(--r-md);
   cursor: pointer;
-  transition: background .15s, box-shadow .15s, transform .1s;
+  transition: background .18s var(--ease-out-quart), box-shadow .18s, transform .15s var(--ease-out-quart);
   text-decoration: none;
 
   &--primary {
@@ -216,6 +224,7 @@ ul { padding-left: 1.5rem; li { margin-bottom: 4px; } }
     &:hover:not(:disabled) {
       background: var(--c-primary-dark);
       box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
     }
     &:active:not(:disabled) { transform: translateY(1px); }
   }
@@ -241,7 +250,24 @@ ul { padding-left: 1.5rem; li { margin-bottom: 4px; } }
   }
 }
 
-@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes spin     { to { transform: rotate(360deg); } }
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes slide-down {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes scale-pop {
+  from { opacity: 0; transform: scale(0.55); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
 
 /* ── State cards ───────────────────────────────────────────────────────── */
 .state-card {
@@ -251,8 +277,13 @@ ul { padding-left: 1.5rem; li { margin-bottom: 4px; } }
   text-align: center;
   padding: 40px 24px;
   gap: 12px;
+  animation: fade-up 320ms var(--ease-out-quart) both;
 
-  &__icon { font-size: 3rem; line-height: 1; }
+  &__icon {
+    font-size: 3rem;
+    line-height: 1;
+    animation: scale-pop 350ms var(--ease-out-expo) 80ms both;
+  }
   &__title { font-size: 1.375rem; font-weight: 700; }
   &__body  { color: var(--c-text-muted); line-height: 1.6; }
   &__actions { margin-top: 8px; }
@@ -269,6 +300,7 @@ ul { padding-left: 1.5rem; li { margin-bottom: 4px; } }
   border-radius: var(--r-md);
   font-size: .9375rem;
   margin: 0 24px;
+  animation: slide-down 220ms var(--ease-out-expo) both;
 
   &--error {
     background: var(--c-error-bg);
@@ -290,5 +322,15 @@ ul { padding-left: 1.5rem; li { margin-bottom: 4px; } }
   border-radius: var(--r-xl);
   box-shadow: var(--shadow-lg);
   overflow: hidden;
+  animation: fade-up 420ms var(--ease-out-expo) both;
 }
 
+/* ── Accessibility: respect reduced motion ─────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

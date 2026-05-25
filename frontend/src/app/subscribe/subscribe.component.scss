@@ -5,6 +5,7 @@
   border-radius: var(--r-xl);
   box-shadow: var(--shadow-lg);
   overflow: hidden;
+  animation: fade-up 420ms var(--ease-out-expo) both;
 
   &__hero {
     background: linear-gradient(145deg, var(--c-primary-tint) 0%, var(--c-primary-tint2) 100%);
@@ -13,18 +14,26 @@
     text-align: center;
   }
 
-  &__icon { font-size: 3rem; line-height: 1; margin-bottom: 12px; }
+  &__icon {
+    font-size: 3rem;
+    line-height: 1;
+    margin-bottom: 12px;
+    display: block;
+    animation: scale-pop 320ms var(--ease-out-expo) 200ms both;
+  }
 
   &__title {
     font-size: 1.625rem;
     font-weight: 700;
     margin-bottom: 8px;
+    animation: fade-up 280ms var(--ease-out-quart) 270ms both;
   }
 
   &__subtitle {
     color: var(--c-text-muted);
     font-size: .9375rem;
     line-height: 1.5;
+    animation: fade-up 280ms var(--ease-out-quart) 320ms both;
   }
 
   &__footer {
@@ -32,6 +41,7 @@
     padding: 16px 32px 24px;
     font-size: .8125rem;
     color: var(--c-text-muted);
+    animation: fade-up 260ms var(--ease-out-quart) 610ms both;
     a { color: var(--c-text-muted); font-weight: 500; }
   }
 }
@@ -54,6 +64,15 @@
   border-bottom: 1px solid var(--c-border);
   list-style: none;
   margin: 0;
+
+  li {
+    animation: fade-up 250ms var(--ease-out-quart) both;
+    &:nth-child(1) { animation-delay: 360ms; }
+    &:nth-child(2) { animation-delay: 400ms; }
+    &:nth-child(3) { animation-delay: 440ms; }
+    &:nth-child(4) { animation-delay: 480ms; }
+    &:nth-child(5) { animation-delay: 520ms; }
+  }
 
   &__step {
     display: flex;
@@ -97,6 +116,12 @@
     &__sep { transform: rotate(90deg); }
   }
 }
+
+/* ── Form stagger ─────────────────────────────────────────────────────── */
+.subscribe-form > *:nth-child(1) { animation: fade-up 260ms var(--ease-out-quart) 430ms both; }
+.subscribe-form > *:nth-child(2) { animation: fade-up 260ms var(--ease-out-quart) 475ms both; }
+.subscribe-form > *:nth-child(3) { animation: fade-up 260ms var(--ease-out-quart) 520ms both; }
+.subscribe-form > *:nth-child(4) { animation: fade-up 260ms var(--ease-out-quart) 565ms both; }
 
 /* ── Onboarding: success next-steps ──────────────────────────────────── */
 .next-steps {

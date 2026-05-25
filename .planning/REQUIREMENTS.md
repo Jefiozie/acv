@@ -18,9 +18,9 @@
 
 ### Subscription
 
-- [ ] **SUB-01**: User can submit subscribe form with email address and township selection
-- [ ] **SUB-02**: Township picker lists all supported ACV Groep locations by name
-- [ ] **SUB-03**: User chooses notification frequency: "Immediately" or "Daily digest"
+- [x] **SUB-01**: User can submit subscribe form with email address and township selection
+- [x] **SUB-02**: Township picker lists all supported ACV Groep locations by name
+- [x] **SUB-03**: User chooses notification frequency: "Immediately" or "Daily digest"
 - [ ] **SUB-04**: Duplicate subscription (same email + township) is rejected silently (no error exposed, confirmation email resent)
 - [ ] **SUB-05**: Subscribe endpoint is rate-limited per IP to prevent abuse
 - [ ] **SUB-06**: Confirmation email is sent to subscriber immediately after form submission (double opt-in)
@@ -57,8 +57,8 @@
 ### Frontend
 
 - [x] **FE-01**: Angular 21+ SPA — standalone components, signals, new `@if`/`@for` control flow, no NgModules
-- [ ] **FE-02**: Subscribe form validates email format and requires township + frequency selection before submit
-- [ ] **FE-03**: Form shows success state after submission (instructs user to check email)
+- [x] **FE-02**: Subscribe form validates email format and requires township + frequency selection before submit
+- [x] **FE-03**: Form shows success state after submission (instructs user to check email)
 - [x] **FE-04**: Confirmation page shown when user clicks the confirmation link from email
 - [x] **FE-05**: Unsubscribed page shown after unsubscribe link is followed
 - [x] **FE-06**: App is accessible (WCAG AA): keyboard navigable, ARIA labels on form controls
@@ -112,9 +112,9 @@
 | INFRA-06 | Phase 1 | Pending |
 | INFRA-07 | Phase 1 | Pending |
 | INFRA-08 | Phase 4 | Pending |
-| SUB-01 | Phase 3 | Pending |
-| SUB-02 | Phase 3 | Pending |
-| SUB-03 | Phase 3 | Pending |
+| SUB-01 | Phase 3 | Complete |
+| SUB-02 | Phase 3 | Complete |
+| SUB-03 | Phase 3 | Complete |
 | SUB-04 | Phase 2 | Pending |
 | SUB-05 | Phase 2 | Pending |
 | SUB-06 | Phase 2 | Pending |
@@ -139,8 +139,8 @@
 | NOTIF-03 | Phase 2 | Pending |
 | NOTIF-04 | Phase 2 | Pending |
 | FE-01 | Phase 3 | Complete |
-| FE-02 | Phase 3 | Pending |
-| FE-03 | Phase 3 | Pending |
+| FE-02 | Phase 3 | Complete |
+| FE-03 | Phase 3 | Complete |
 | FE-04 | Phase 3 | Complete |
 | FE-05 | Phase 3 | Complete |
 | FE-06 | Phase 3 | Complete |

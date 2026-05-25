@@ -194,54 +194,9 @@ function normalizeTime(text: string): string {
   return text.replace(/:00(?= |-|$)/g, "");
 }
 
-// ─── Cache (GitHub Gist in CI, local file in dev) ────────────────────────────
+// ─── Cache ────────────────────────────────────────────────────────────────────
 
-const GIST_ID = process.env.CACHE_GIST_ID ?? "";
-const GITHUB_TOKEN = process.env.GITHUB_TOKEN ?? "";
-const GIST_FILENAME = "acv-availability-cache.json";
-
-function gistRequest(method: string, body?: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const req = request(
-      {
-        hostname: "api.github.com",
-        path: `/gists/${GIST_ID}`,
-        method,
-        headers: {
-          Authorization: `Bearer ${GITHUB_TOKEN}`,
-          "User-Agent": "acv-aanhanger-checker",
-          Accept: "application/vnd.github+json",
-          "X-GitHub-Api-Version": "2022-11-28",
-          ...(body ? { "Content-Type": "application/json", "Content-Length": Buffer.byteLength(body) } : {}),
-        },
-      },
-      (res) => {
-        let data = "";
-        res.on("data", (chunk: Buffer) => (data += chunk.toString()));
-        res.on("end", () => resolve(data));
-      }
-    );
-    req.on("error", reject);
-    if (body) req.write(body);
-    req.end();
-  });
-}
-
-async function loadCache(): Promise<Cache> {
-  // Use Gist when running in CI
-  if (GIST_ID && GITHUB_TOKEN) {
-    try {
-      const raw = await gistRequest("GET");
-      const gist = JSON.parse(raw) as { files?: Record<string, { content?: string }> };
-      const content = gist.files?.[GIST_FILENAME]?.content;
-      if (content) return JSON.parse(content) as Cache;
-    } catch (e) {
-      console.warn("Could not load Gist cache, starting fresh:", e);
-    }
-    return {};
-  }
-
-  // Local fallback
+function loadCache(): Cache {
   if (existsSync(CACHE_FILE)) {
     try {
       return JSON.parse(readFileSync(CACHE_FILE, "utf8")) as Cache;
@@ -252,18 +207,7 @@ async function loadCache(): Promise<Cache> {
   return {};
 }
 
-async function saveCache(cache: Cache): Promise<void> {
-  // Use Gist when running in CI
-  if (GIST_ID && GITHUB_TOKEN) {
-    const body = JSON.stringify({
-      files: { [GIST_FILENAME]: { content: JSON.stringify(cache, null, 2) } },
-    });
-    await gistRequest("PATCH", body);
-    console.log("Cache saved to Gist.");
-    return;
-  }
-
-  // Local fallback
+function saveCache(cache: Cache): void {
   writeFileSync(CACHE_FILE, JSON.stringify(cache, null, 2), "utf8");
 }
 
@@ -384,7 +328,7 @@ async function main(): Promise<void> {
   }
 
   // Find dates/slots not seen before
-  const previousCache = await loadCache();
+  const previousCache = loadCache();
   const newOrUpdated = upcomingAvailable.filter((day) => {
     const prev = previousCache[day.date];
     if (!prev) return true; // new date
@@ -412,7 +356,7 @@ async function main(): Promise<void> {
     }
   }
 
-  await saveCache(currentCache);
+  saveCache(currentCache);
   console.log("Cache updated.");
 }
 

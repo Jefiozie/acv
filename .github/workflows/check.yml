@@ -11,6 +11,9 @@ jobs:
   check:
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    # Allow the workflow to push the updated cache back to the repo
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout
@@ -30,7 +33,12 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           TOWNSHIP: ${{ secrets.TOWNSHIP || '16' }}
-          # Used to persist the availability cache between runs via a GitHub Gist
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CACHE_GIST_ID: ${{ secrets.CACHE_GIST_ID }}
         run: npm run check
+
+      - name: Commit updated cache
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add availability_cache.json
+          git diff --staged --quiet || git commit -m "chore: update availability cache [skip ci]"
+          git push

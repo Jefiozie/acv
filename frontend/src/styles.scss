@@ -3,38 +3,38 @@
   --font:         'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
 
-  /* Brand — warm orange */
-  --c-primary:        #F97316;
-  --c-primary-dark:   #EA580C;
-  --c-primary-ring:   rgba(249, 115, 22, .2);
-  --c-primary-tint:   #FFF7ED;
-  --c-primary-tint2:  #FFEDD5;
+  /* Brand — Stripe indigo */
+  --c-primary:        #635BFF;
+  --c-primary-dark:   #4F46E5;
+  --c-primary-ring:   rgba(99, 91, 255, .18);
+  --c-primary-tint:   #F0EFFF;
+  --c-primary-tint2:  #E3E2FF;
 
-  /* Surface — warm parchment */
-  --c-bg:             #FAF8F4;
+  /* Surface — Stripe cool light */
+  --c-bg:             #F6F9FC;
   --c-surface:        #FFFFFF;
-  --c-border:         #E5E0D8;
-  --c-border-hover:   #CCC7BE;
+  --c-border:         #E3E8EF;
+  --c-border-hover:   #C1CBE0;
 
-  /* Text */
-  --c-text:           #1A1614;
-  --c-text-muted:     #6B6560;
-  --c-text-light:     #A09890;
+  /* Text — Stripe deep navy */
+  --c-text:           #0A2540;
+  --c-text-muted:     #425466;
+  --c-text-light:     #697386;
 
   /* Feedback */
-  --c-success:        #16A34A;
-  --c-success-bg:     #F0FDF4;
-  --c-success-border: #BBF7D0;
-  --c-error:          #DC2626;
-  --c-error-bg:       #FEF2F2;
-  --c-error-border:   #FECACA;
+  --c-success:        #0E9E6B;
+  --c-success-bg:     #ECFDF5;
+  --c-success-border: #A7F3D0;
+  --c-error:          #DF1B41;
+  --c-error-bg:       #FFF0F3;
+  --c-error-border:   #FECDD3;
 
-  /* Shadows — lighter, more editorial */
-  --shadow-sm: 0 1px 4px rgba(0,0,0,.04), 0 1px 2px rgba(0,0,0,.03);
-  --shadow-md: 0 4px 16px rgba(0,0,0,.07), 0 2px 4px rgba(0,0,0,.04);
-  --shadow-lg: 0 16px 48px rgba(0,0,0,.09), 0 4px 8px rgba(0,0,0,.04);
+  /* Shadows */
+  --shadow-sm: 0 1px 4px rgba(10,37,64,.05), 0 1px 2px rgba(10,37,64,.03);
+  --shadow-md: 0 4px 16px rgba(10,37,64,.08), 0 2px 4px rgba(10,37,64,.04);
+  --shadow-lg: 0 16px 48px rgba(10,37,64,.10), 0 4px 8px rgba(10,37,64,.04);
 
-  /* Radii — refined, less bubbly */
+  /* Radii */
   --r-sm:  3px;
   --r-md:  6px;
   --r-lg:  8px;

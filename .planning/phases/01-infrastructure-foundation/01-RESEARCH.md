@@ -882,7 +882,7 @@ cdk synth      # produces CloudFormation templates in cdk.out/
 | Property | Value |
 |----------|-------|
 | Framework | CDK Assertions (`aws-cdk-lib/assertions`) — built-in, no extra install |
-| Config file | `infrastructure/jest.config.ts` (Wave 0 gap — must create) |
+| Config file | `infrastructure/vitest.config.ts` (Wave 0 gap — must create) |
 | Quick run command | `cd infrastructure && npm test` |
 | Full suite command | `cd infrastructure && npm test -- --coverage` |
 
@@ -947,9 +947,9 @@ describe('StatefulStack', () => {
 
 - [ ] `infrastructure/test/stateful-stack.test.ts` — covers INFRA-02, INFRA-04, INFRA-05, INFRA-07
 - [ ] `infrastructure/test/backend-stack.test.ts` — covers INFRA-03, CHK-02
-- [ ] `infrastructure/jest.config.ts` — test runner config
-- [ ] Jest + `ts-jest` in `infrastructure/package.json` devDependencies
-- [ ] `infrastructure/package.json` test script: `"test": "jest"`
+- [ ] `infrastructure/vitest.config.ts` — test runner config
+- [ ] `vitest` in `infrastructure/package.json` devDependencies
+- [ ] `infrastructure/package.json` test script: `"test": "vitest run"`
 
 ---
 

@@ -16,7 +16,7 @@ These are created in plan 01-01 as stubs (no assertions yet). Filled in during 0
 
 | File | Purpose |
 |------|---------|
-| `infrastructure/jest.config.ts` | ts-jest preset, runs `test/**/*.test.ts` |
+| `infrastructure/vitest.config.ts` | vitest config, runs `test/**/*.test.ts` |
 | `infrastructure/test/stateful-stack.test.ts` | CDK Assertions for DynamoDB + SES |
 | `infrastructure/test/backend-stack.test.ts` | CDK Assertions for EventBridge + HttpApi |
 

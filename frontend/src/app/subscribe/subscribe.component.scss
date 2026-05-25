@@ -1,170 +1,188 @@
-.subscribe-card {
-  max-width: 480px;
+/* ── Subscribe page — editorial layout ────────────────────────────────── */
+.subscribe-page {
+  max-width: 1020px;
   margin: 0 auto;
-  background: var(--c-surface);
-  border-radius: var(--r-xl);
-  box-shadow: var(--shadow-lg);
-  overflow: hidden;
-  animation: fade-up 420ms var(--ease-out-expo) both;
+  padding: 64px 28px 80px;
+  animation: fade-up 380ms var(--ease-out-expo) both;
 
-  &__hero {
-    background: linear-gradient(145deg, var(--c-primary-tint) 0%, var(--c-primary-tint2) 100%);
-    border-bottom: 1px solid #FED7AA;
-    padding: 36px 32px 28px;
-    text-align: center;
-  }
-
-  &__icon {
-    font-size: 3rem;
-    line-height: 1;
-    margin-bottom: 12px;
-    display: block;
-    animation: scale-pop 320ms var(--ease-out-expo) 200ms both;
-  }
-
-  &__title {
-    font-size: 1.625rem;
-    font-weight: 700;
-    margin-bottom: 8px;
-    animation: fade-up 280ms var(--ease-out-quart) 270ms both;
-  }
-
-  &__subtitle {
-    color: var(--c-text-muted);
-    font-size: .9375rem;
-    line-height: 1.5;
-    animation: fade-up 280ms var(--ease-out-quart) 320ms both;
-  }
-
-  &__footer {
-    text-align: center;
-    padding: 16px 32px 24px;
-    font-size: .8125rem;
-    color: var(--c-text-muted);
-    animation: fade-up 260ms var(--ease-out-quart) 610ms both;
-    a { color: var(--c-text-muted); font-weight: 500; }
+  @media (min-width: 720px) {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 80px;
+    align-items: start;
+    padding: 80px 40px 100px;
   }
 }
 
-.subscribe-form {
+/* ── Editorial panel ──────────────────────────────────────────────────── */
+.subscribe-page__editorial {
+  padding-bottom: 48px;
+
+  @media (min-width: 720px) {
+    padding-bottom: 0;
+    position: sticky;
+    top: 88px;
+  }
+}
+
+.editorial-eyebrow {
+  font-size: .6875rem;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--c-primary);
+  margin: 0 0 20px;
+  animation: fade-up 300ms var(--ease-out-quart) 80ms both;
+}
+
+.editorial-headline {
+  font-family: var(--font-display);
+  font-size: clamp(2.75rem, 5.5vw, 4.5rem);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -.025em;
+  color: var(--c-text);
+  margin: 0 0 28px;
+  animation: fade-up 400ms var(--ease-out-expo) 120ms both;
+
+  em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--c-primary);
+  }
+}
+
+.editorial-body {
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: var(--c-text-muted);
+  margin: 0 0 36px;
+  max-width: 440px;
+  animation: fade-up 300ms var(--ease-out-quart) 200ms both;
+}
+
+.editorial-steps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  padding: 28px 32px 24px;
-}
-
-/* ── Onboarding: how it works strip ───────────────────────────────────── */
-.how-it-works {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 14px 20px;
-  background: var(--c-bg);
-  border-bottom: 1px solid var(--c-border);
-  list-style: none;
-  margin: 0;
+  gap: 16px;
+  border-top: 1px solid var(--c-border);
+  padding-top: 28px;
 
   li {
-    animation: fade-up 250ms var(--ease-out-quart) both;
-    &:nth-child(1) { animation-delay: 360ms; }
-    &:nth-child(2) { animation-delay: 400ms; }
-    &:nth-child(3) { animation-delay: 440ms; }
-    &:nth-child(4) { animation-delay: 480ms; }
-    &:nth-child(5) { animation-delay: 520ms; }
-  }
-
-  &__step {
     display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  &__num {
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    background: var(--c-primary);
-    color: #fff;
-    font-size: .6875rem;
-    font-weight: 700;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-
-  &__label {
-    font-size: .8125rem;
-    font-weight: 600;
+    align-items: baseline;
+    gap: 16px;
+    font-size: .9375rem;
     color: var(--c-text-muted);
-    white-space: nowrap;
-  }
-
-  &__sep {
-    color: var(--c-text-light);
-    font-size: .75rem;
-    flex-shrink: 0;
+    line-height: 1.5;
+    animation: fade-up 280ms var(--ease-out-quart) both;
+    &:nth-child(1) { animation-delay: 280ms; }
+    &:nth-child(2) { animation-delay: 340ms; }
+    &:nth-child(3) { animation-delay: 400ms; }
   }
 }
 
-/* Mobile: stack how-it-works vertically on very small screens */
-@media (max-width: 380px) {
-  .how-it-works {
-    flex-direction: column;
-    gap: 6px;
-    &__sep { transform: rotate(90deg); }
+.editorial-step-num {
+  font-family: var(--font-display);
+  font-size: .875rem;
+  font-weight: 700;
+  color: var(--c-primary);
+  flex-shrink: 0;
+  min-width: 26px;
+}
+
+/* ── Form panel ───────────────────────────────────────────────────────── */
+.subscribe-page__form-panel {
+  background: var(--c-surface);
+  border: 1.5px solid var(--c-border);
+  border-radius: var(--r-xl);
+  padding: 36px 32px 32px;
+  animation: fade-up 360ms var(--ease-out-expo) 160ms both;
+
+  @media (max-width: 480px) {
+    padding: 28px 20px 24px;
+    border-left: none;
+    border-right: none;
+    border-radius: 0;
+    margin: 0 -28px;
   }
 }
 
-/* ── Form stagger ─────────────────────────────────────────────────────── */
-.subscribe-form > *:nth-child(1) { animation: fade-up 260ms var(--ease-out-quart) 430ms both; }
-.subscribe-form > *:nth-child(2) { animation: fade-up 260ms var(--ease-out-quart) 475ms both; }
-.subscribe-form > *:nth-child(3) { animation: fade-up 260ms var(--ease-out-quart) 520ms both; }
-.subscribe-form > *:nth-child(4) { animation: fade-up 260ms var(--ease-out-quart) 565ms both; }
-
-/* ── Onboarding: success next-steps ──────────────────────────────────── */
-.next-steps {
-  list-style: none;
-  margin: 4px 0 0;
-  padding: 0 0 4px;
+/* ── Success state ────────────────────────────────────────────────────── */
+.subscribe-success {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  text-align: left;
-  width: 100%;
+  animation: fade-up 300ms var(--ease-out-quart) both;
 
-  li {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    font-size: .9rem;
+  &__icon {
+    font-size: 2rem;
+    line-height: 1;
+    margin: 0;
+    animation: scale-pop 320ms var(--ease-out-expo) 80ms both;
+  }
+
+  &__title {
+    font-family: var(--font-display);
+    font-size: 1.625rem;
+    font-weight: 700;
+    color: var(--c-success);
+    margin: 4px 0 0;
+    line-height: 1.2;
+  }
+
+  &__body {
+    font-size: .9375rem;
     color: var(--c-text-muted);
-    line-height: 1.5;
-    margin-bottom: 0;
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  &__steps {
+    list-style: none;
+    padding: 0;
+    margin: 8px 0 0;
+    border-top: 1px solid var(--c-border);
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    li {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      font-size: .9rem;
+      color: var(--c-text-muted);
+      line-height: 1.5;
+    }
   }
 }
 
-.next-steps__num {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: var(--c-success);
-  color: #fff;
-  font-size: .6875rem;
-  font-weight: 700;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  margin-top: 1px;
+/* ── Subscribe form ───────────────────────────────────────────────────── */
+.subscribe-form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+
+  > *:nth-child(1) { animation: fade-up 260ms var(--ease-out-quart) 240ms both; }
+  > *:nth-child(2) { animation: fade-up 260ms var(--ease-out-quart) 290ms both; }
+  > *:nth-child(3) { animation: fade-up 260ms var(--ease-out-quart) 340ms both; }
+  > *:nth-child(4) { animation: fade-up 260ms var(--ease-out-quart) 390ms both; }
 }
 
+.subscribe-legal {
+  margin-top: 16px;
+  font-size: .8125rem;
+  color: var(--c-text-light);
+  line-height: 1.6;
+  animation: fade-up 260ms var(--ease-out-quart) 440ms both;
 
-@media (max-width: 520px) {
-  .subscribe-card {
-    border-radius: var(--r-lg);
-    &__hero { padding: 28px 20px 22px; }
+  a {
+    color: var(--c-text-muted);
+    font-weight: 500;
   }
-  .subscribe-form { padding: 24px 20px 20px; }
 }

@@ -1,156 +1,165 @@
-<div class="subscribe-card">
+<article class="subscribe-page">
 
-  <!-- Hero -->
-  <div class="subscribe-card__hero">
-    <div class="subscribe-card__icon" aria-hidden="true">🚐</div>
-    <h1 class="subscribe-card__title">Aanhanger vrij?</h1>
-    <p class="subscribe-card__subtitle">
-      Vul je e-mail in en ontvang meteen een melding zodra er een aanhanger beschikbaar is in jouw gemeente. Gratis en zonder spam.
+  <!-- ── Editorial panel ───────────────────────────────────────── -->
+  <div class="subscribe-page__editorial">
+    <p class="editorial-eyebrow">Gratis meldingsdienst</p>
+
+    <h1 class="editorial-headline">
+      Als eerste weten<br>
+      dat er een aanhanger<br>
+      <em>beschikbaar is.</em>
+    </h1>
+
+    <p class="editorial-body">
+      Laat je e-mailadres achter. Zodra er een aanhanger vrij is in jouw gemeente,
+      sturen wij je direct een bericht. Gratis, geen spam.
     </p>
-  </div>
 
-  @if (state() === 'success') {
-    <div class="state-card state-card--success" role="status">
-      <div class="state-card__icon" aria-hidden="true">✉️</div>
-      <p class="state-card__title">Check je inbox!</p>
-      <p class="state-card__body">
-        We stuurden je een bevestigingsmail. Activeer je aanmelding via de link in de e-mail.
-      </p>
-      <ol class="next-steps">
-        <li>
-          <span class="next-steps__num" aria-hidden="true">1</span>
-          Open de bevestigingsmail van ACV Aanhanger
-        </li>
-        <li>
-          <span class="next-steps__num" aria-hidden="true">2</span>
-          Klik op <strong>Bevestig aanmelding</strong>
-        </li>
-        <li>
-          <span class="next-steps__num" aria-hidden="true">3</span>
-          Klaar — wij laten je weten als er een slot vrijkomt
-        </li>
-      </ol>
-    </div>
-
-  } @else {
-
-    <!-- How it works -->
-    <ol class="how-it-works" aria-label="Zo werkt het">
-      <li class="how-it-works__step">
-        <span class="how-it-works__num" aria-hidden="true">1</span>
-        <span class="how-it-works__label">Aanmelden</span>
+    <ol class="editorial-steps" aria-label="Zo werkt het">
+      <li>
+        <span class="editorial-step-num" aria-hidden="true">01</span>
+        <span>Vul je gegevens in</span>
       </li>
-      <li class="how-it-works__sep" aria-hidden="true">→</li>
-      <li class="how-it-works__step">
-        <span class="how-it-works__num" aria-hidden="true">2</span>
-        <span class="how-it-works__label">E-mail bevestigen</span>
+      <li>
+        <span class="editorial-step-num" aria-hidden="true">02</span>
+        <span>Bevestig via e-mail</span>
       </li>
-      <li class="how-it-works__sep" aria-hidden="true">→</li>
-      <li class="how-it-works__step">
-        <span class="how-it-works__num" aria-hidden="true">3</span>
-        <span class="how-it-works__label">Melding ontvangen</span>
+      <li>
+        <span class="editorial-step-num" aria-hidden="true">03</span>
+        <span>Ontvang een melding bij een vrij slot</span>
       </li>
     </ol>
+  </div>
 
-    @if (state() === 'error') {
-      <div class="inline-alert inline-alert--error" role="alert">
-        <span aria-hidden="true">⚠️</span>
-        Er is iets misgegaan. Probeer het opnieuw of neem contact op.
-      </div>
-    }
+  <!-- ── Form panel ────────────────────────────────────────────── -->
+  <div class="subscribe-page__form-panel">
 
-    <form (submit)="onSubmit($event)" class="subscribe-form" novalidate>
-
-      <div class="form-field">
-        <label class="form-label" for="email">E-mailadres</label>
-        <input
-          id="email"
-          type="email"
-          class="form-input"
-          [formField]="emailField"
-          aria-required="true"
-          aria-describedby="email-error email-hint"
-          autocomplete="email"
-          placeholder="naam@voorbeeld.nl"
-        />
-        @if (emailField().invalid() && emailField().touched()) {
-          <p id="email-error" class="form-error" role="alert">
-            <span aria-hidden="true">⚠</span> Voer een geldig e-mailadres in.
-          </p>
-        }
-        <p id="email-hint" class="form-hint">
-          <span aria-hidden="true">🔒</span> We sturen nooit spam en delen je adres niet.
+    @if (state() === 'success') {
+      <div class="subscribe-success" role="status">
+        <p class="subscribe-success__icon" aria-hidden="true">✉️</p>
+        <h2 class="subscribe-success__title">Check je inbox!</h2>
+        <p class="subscribe-success__body">
+          We stuurden je een bevestigingsmail. Activeer je aanmelding via de link.
         </p>
+        <ol class="subscribe-success__steps">
+          <li>
+            <span class="editorial-step-num" aria-hidden="true">01</span>
+            Open de bevestigingsmail van ACV Aanhanger
+          </li>
+          <li>
+            <span class="editorial-step-num" aria-hidden="true">02</span>
+            Klik op <strong>Bevestig aanmelding</strong>
+          </li>
+          <li>
+            <span class="editorial-step-num" aria-hidden="true">03</span>
+            Klaar — wij laten je weten als er een slot vrijkomt
+          </li>
+        </ol>
       </div>
 
-      <div class="form-field">
-        <label class="form-label" for="township">Gemeente</label>
-        <div class="form-select-wrap">
-          <select
-            id="township"
-            class="form-select"
-            [formField]="townshipIdField"
+    } @else {
+
+      @if (state() === 'error') {
+        <div class="inline-alert inline-alert--error" role="alert">
+          <span aria-hidden="true">⚠️</span>
+          Er is iets misgegaan. Probeer het opnieuw of neem contact op.
+        </div>
+      }
+
+      <form (submit)="onSubmit($event)" class="subscribe-form" novalidate>
+
+        <div class="form-field">
+          <label class="form-label" for="email">E-mailadres</label>
+          <input
+            id="email"
+            type="email"
+            class="form-input"
+            [formField]="emailField"
             aria-required="true"
-            aria-describedby="township-error"
-          >
-            <option value="">Kies een gemeente…</option>
-            @for (t of townships; track t.id) {
-              <option [value]="t.id">{{ t.name }}</option>
-            }
-          </select>
-        </div>
-        @if (townshipIdField().invalid() && townshipIdField().touched()) {
-          <p id="township-error" class="form-error" role="alert">
-            <span aria-hidden="true">⚠</span> Selecteer een gemeente.
+            aria-describedby="email-error email-hint"
+            autocomplete="email"
+            placeholder="naam@voorbeeld.nl"
+          />
+          @if (emailField().invalid() && emailField().touched()) {
+            <p id="email-error" class="form-error" role="alert">
+              <span aria-hidden="true">⚠</span> Voer een geldig e-mailadres in.
+            </p>
+          }
+          <p id="email-hint" class="form-hint">
+            <span aria-hidden="true">🔒</span> We sturen nooit spam en delen je adres niet.
           </p>
-        }
-      </div>
-
-      <fieldset class="form-fieldset">
-        <legend class="form-label">Wanneer wil je een melding?</legend>
-        <div class="form-radios">
-          <label class="form-radio-option">
-            <input type="radio" [formField]="frequencyField" value="immediate" aria-describedby="frequency-error" />
-            <span class="option-text">
-              <strong>Meteen</strong>
-              <small>Zodra er een slot vrijkomt</small>
-            </span>
-          </label>
-          <label class="form-radio-option">
-            <input type="radio" [formField]="frequencyField" value="daily" aria-describedby="frequency-error" />
-            <span class="option-text">
-              <strong>Dagelijks overzicht</strong>
-              <small>Elke dag een samenvatting</small>
-            </span>
-          </label>
         </div>
-        @if (frequencyField().invalid() && frequencyField().touched()) {
-          <p id="frequency-error" class="form-error" role="alert">
-            <span aria-hidden="true">⚠</span> Kies een meldingsfrequentie.
-          </p>
-        }
-      </fieldset>
 
-      <button
-        type="submit"
-        class="btn btn--primary btn--full"
-        [disabled]="subscribeForm().invalid() || state() === 'loading'"
-        [attr.aria-busy]="state() === 'loading'"
-      >
-        @if (state() === 'loading') {
-          <span class="btn-spinner" aria-hidden="true"></span>
-          Bezig met aanmelden…
-        } @else {
-          Aanmelden <span aria-hidden="true">→</span>
-        }
-      </button>
+        <div class="form-field">
+          <label class="form-label" for="township">Gemeente</label>
+          <div class="form-select-wrap">
+            <select
+              id="township"
+              class="form-select"
+              [formField]="townshipIdField"
+              aria-required="true"
+              aria-describedby="township-error"
+            >
+              <option value="">Kies een gemeente…</option>
+              @for (t of townships; track t.id) {
+                <option [value]="t.id">{{ t.name }}</option>
+              }
+            </select>
+          </div>
+          @if (townshipIdField().invalid() && townshipIdField().touched()) {
+            <p id="township-error" class="form-error" role="alert">
+              <span aria-hidden="true">⚠</span> Selecteer een gemeente.
+            </p>
+          }
+        </div>
 
-    </form>
+        <fieldset class="form-fieldset">
+          <legend class="form-label">Wanneer wil je een melding?</legend>
+          <div class="form-radios">
+            <label class="form-radio-option">
+              <input type="radio" [formField]="frequencyField" value="immediate" aria-describedby="frequency-error" />
+              <span class="option-text">
+                <strong>Meteen</strong>
+                <small>Zodra er een slot vrijkomt</small>
+              </span>
+            </label>
+            <label class="form-radio-option">
+              <input type="radio" [formField]="frequencyField" value="daily" aria-describedby="frequency-error" />
+              <span class="option-text">
+                <strong>Dagelijks overzicht</strong>
+                <small>Elke dag een samenvatting</small>
+              </span>
+            </label>
+          </div>
+          @if (frequencyField().invalid() && frequencyField().touched()) {
+            <p id="frequency-error" class="form-error" role="alert">
+              <span aria-hidden="true">⚠</span> Kies een meldingsfrequentie.
+            </p>
+          }
+        </fieldset>
 
-    <p class="subscribe-card__footer">
-      Door je aan te melden ga je akkoord met ons <a routerLink="/privacy">privacybeleid</a>.
-      Je kunt je altijd uitschrijven via de link in de e-mail.
-    </p>
+        <button
+          type="submit"
+          class="btn btn--primary btn--full"
+          [disabled]="subscribeForm().invalid() || state() === 'loading'"
+          [attr.aria-busy]="state() === 'loading'"
+        >
+          @if (state() === 'loading') {
+            <span class="btn-spinner" aria-hidden="true"></span>
+            Bezig met aanmelden…
+          } @else {
+            Aanmelden <span aria-hidden="true">→</span>
+          }
+        </button>
 
-  }
-</div>
+      </form>
+
+      <p class="subscribe-legal">
+        Door je aan te melden ga je akkoord met ons <a routerLink="/privacy">privacybeleid</a>.
+        Je kunt je altijd uitschrijven via de link in de e-mail.
+      </p>
+
+    }
+  </div>
+
+</article>

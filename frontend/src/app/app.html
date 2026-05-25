@@ -1,22 +1,22 @@
-
 <div class="app-shell">
-  <header class="app-header">
+  <header class="app-header" role="banner">
     <div class="app-header__inner">
-      <a routerLink="/" class="app-header__brand">
+      <a class="app-header__brand" routerLink="/" aria-label="ACV Aanhanger — naar aanmeldpagina">
         <span class="app-header__icon" aria-hidden="true">🚐</span>
-        <span class="app-header__name">ACV&nbsp;<strong>Aanhanger</strong></span>
+        <span class="app-header__wordmark">ACV <strong>Aanhanger</strong></span>
       </a>
+      <span class="app-header__rule" aria-hidden="true"></span>
+      <span class="app-header__service" aria-hidden="true">Beschikbaarheidsmelding</span>
     </div>
   </header>
 
-  <main class="app-main">
+  <main class="app-main" id="main">
     <router-outlet />
   </main>
 
-  <footer class="app-footer">
+  <footer class="app-footer" role="contentinfo">
     <a routerLink="/privacy">Privacybeleid</a>
     <span aria-hidden="true">·</span>
-    <span>ACV Groep</span>
+    <span>© 2025 ACV Groep</span>
   </footer>
 </div>
-

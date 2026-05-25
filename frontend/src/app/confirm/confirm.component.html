@@ -1,35 +1,33 @@
-<div class="page-card">
+<div class="state-page" aria-live="polite">
+
   @if (state() === 'loading') {
-    <div class="state-card" aria-live="polite" aria-busy="true">
-      <div class="state-card__icon" aria-hidden="true">⏳</div>
-      <p class="state-card__title">Bezig…</p>
-      <p class="state-card__body">We verwerken je bevestiging.</p>
+    <div class="state-page__content" aria-busy="true">
+      <p class="state-page__eyebrow">Even geduld…</p>
+      <h1 class="state-page__headline">Bezig…</h1>
+      <p class="state-page__body">We verwerken je bevestiging.</p>
     </div>
   }
 
   @if (state() === 'success') {
-    <div class="state-card state-card--success" role="status">
-      <div class="state-card__icon" aria-hidden="true">✅</div>
-      <h1 class="state-card__title">Je aanmelding is bevestigd!</h1>
-      <p class="state-card__body">
+    <div class="state-page__content" role="status">
+      <p class="state-page__eyebrow state-page__eyebrow--success">Aanmelding actief</p>
+      <h1 class="state-page__headline">Je aanmelding is bevestigd!</h1>
+      <p class="state-page__body">
         Je ontvangt voortaan een melding zodra er een aanhanger beschikbaar is in jouw gemeente.
       </p>
-      <div class="state-card__actions">
-        <a routerLink="/" class="btn btn--ghost">← Terug naar aanmelden</a>
-      </div>
+      <a routerLink="/" class="btn btn--ghost">← Terug naar aanmelden</a>
     </div>
   }
 
   @if (state() === 'error') {
-    <div class="state-card state-card--error" role="alert">
-      <div class="state-card__icon" aria-hidden="true">❌</div>
-      <h1 class="state-card__title">Link niet geldig</h1>
-      <p class="state-card__body">
+    <div class="state-page__content" role="alert">
+      <p class="state-page__eyebrow state-page__eyebrow--error">Link niet geldig</p>
+      <h1 class="state-page__headline">Controleer je link</h1>
+      <p class="state-page__body">
         Ongeldige of verlopen bevestigingslink. Vraag een nieuwe bevestigingsmail aan via de aanmeldpagina.
       </p>
-      <div class="state-card__actions">
-        <a routerLink="/" class="btn btn--primary">Opnieuw aanmelden</a>
-      </div>
+      <a routerLink="/" class="btn btn--primary">Opnieuw aanmelden</a>
     </div>
   }
+
 </div>

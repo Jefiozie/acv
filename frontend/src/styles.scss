@@ -1,6 +1,7 @@
 /* ── Design tokens ─────────────────────────────────────────────────────── */
 :root {
-  --font: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font:         'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
 
   /* Brand — warm orange */
   --c-primary:        #F97316;
@@ -9,16 +10,16 @@
   --c-primary-tint:   #FFF7ED;
   --c-primary-tint2:  #FFEDD5;
 
-  /* Surface */
-  --c-bg:             #FAFAF8;
+  /* Surface — warm parchment */
+  --c-bg:             #FAF8F4;
   --c-surface:        #FFFFFF;
-  --c-border:         #E7E5E4;
-  --c-border-hover:   #D6D3D1;
+  --c-border:         #E5E0D8;
+  --c-border-hover:   #CCC7BE;
 
   /* Text */
-  --c-text:           #1C1917;
-  --c-text-muted:     #78716C;
-  --c-text-light:     #A8A29E;
+  --c-text:           #1A1614;
+  --c-text-muted:     #6B6560;
+  --c-text-light:     #A09890;
 
   /* Feedback */
   --c-success:        #16A34A;
@@ -28,16 +29,16 @@
   --c-error-bg:       #FEF2F2;
   --c-error-border:   #FECACA;
 
-  /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
-  --shadow-md: 0 4px 12px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.04);
-  --shadow-lg: 0 12px 32px rgba(0,0,0,.1),  0 4px 8px rgba(0,0,0,.05);
+  /* Shadows — lighter, more editorial */
+  --shadow-sm: 0 1px 4px rgba(0,0,0,.04), 0 1px 2px rgba(0,0,0,.03);
+  --shadow-md: 0 4px 16px rgba(0,0,0,.07), 0 2px 4px rgba(0,0,0,.04);
+  --shadow-lg: 0 16px 48px rgba(0,0,0,.09), 0 4px 8px rgba(0,0,0,.04);
 
-  /* Radii */
-  --r-sm:  6px;
-  --r-md:  10px;
-  --r-lg:  16px;
-  --r-xl:  20px;
+  /* Radii — refined, less bubbly */
+  --r-sm:  3px;
+  --r-md:  6px;
+  --r-lg:  8px;
+  --r-xl:  12px;
 
   /* Easing */
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
@@ -299,7 +300,6 @@ ul { padding-left: 1.5rem; li { margin-bottom: 4px; } }
   padding: 12px 16px;
   border-radius: var(--r-md);
   font-size: .9375rem;
-  margin: 0 24px;
   animation: slide-down 220ms var(--ease-out-expo) both;
 
   &--error {
@@ -314,7 +314,61 @@ ul { padding-left: 1.5rem; li { margin-bottom: 4px; } }
   }
 }
 
-/* ── Page card (shared by confirm/unsubscribe/privacy) ─────────────────── */
+/* ── State page (editorial confirm/unsubscribe layout) ─────────────────── */
+.state-page {
+  max-width: 1020px;
+  margin: 0 auto;
+  padding: 80px 28px 100px;
+
+  &__content {
+    max-width: 520px;
+    animation: fade-up 360ms var(--ease-out-expo) both;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__eyebrow {
+    font-size: .6875rem;
+    font-weight: 700;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--c-text-light);
+    margin: 0;
+    animation: fade-up 280ms var(--ease-out-quart) 60ms both;
+
+    &--success { color: var(--c-success); }
+    &--error   { color: var(--c-error); }
+  }
+
+  &__headline {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -.02em;
+    color: var(--c-text);
+    margin: 0;
+    animation: fade-up 360ms var(--ease-out-expo) 100ms both;
+  }
+
+  &__body {
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: var(--c-text-muted);
+    margin: 0;
+    max-width: 440px;
+    animation: fade-up 300ms var(--ease-out-quart) 160ms both;
+  }
+
+  .btn {
+    margin-top: 8px;
+    align-self: flex-start;
+    animation: fade-up 280ms var(--ease-out-quart) 220ms both;
+  }
+}
+
+/* ── Page card (kept for backward compat, now unused) ──────────────────── */
 .page-card {
   max-width: 520px;
   margin: 0 auto;

@@ -1,0 +1,51 @@
+name: Check ACV Trailer Availability
+
+on:
+  schedule:
+    # Every 15 minutes
+    - cron: "*/15 * * * *"
+  # Allow manual trigger for testing
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dev dependencies
+        run: npm ci
+
+      - name: Restore availability cache
+        uses: actions/cache@v4
+        with:
+          path: availability_cache.json
+          # Prefix key with date so the cache resets each day (preventing
+          # perpetually-cached old dates from blocking new-slot detection).
+          # `restore-keys` ensures we pick up the latest run's cache within
+          # the same day.
+          key: avail-cache-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: |
+            avail-cache-${{ runner.os }}-
+
+      - name: Run availability check
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: npm run check
+
+      - name: Save availability cache
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: availability_cache.json
+          key: avail-cache-${{ runner.os }}-${{ github.run_id }}

@@ -1,0 +1,118 @@
+<section class="subscribe-section">
+  <h1 class="subscribe-section__heading">Aanmelden aanhanger meldingen</h1>
+  <p class="subscribe-section__intro">
+    Ontvang een melding wanneer de aanhanger beschikbaar is in jouw gemeente.
+  </p>
+
+  @if (state() === 'success') {
+    <p role="status" class="subscribe-section__success">
+      Check je inbox voor een bevestigingsmail.
+    </p>
+  }
+
+  @if (state() === 'error') {
+    <p role="alert" class="subscribe-section__error">
+      Er is iets misgegaan. Probeer het opnieuw of neem contact op.
+    </p>
+  }
+
+  @if (state() !== 'success') {
+    <form (submit)="onSubmit($event)" class="subscribe-form" novalidate>
+
+      <!-- Email -->
+      <div class="subscribe-form__field">
+        <label class="subscribe-form__label" for="email">E-mailadres</label>
+        <input
+          id="email"
+          type="email"
+          class="subscribe-form__input"
+          [formField]="emailField"
+          aria-required="true"
+          aria-describedby="email-error"
+          autocomplete="email"
+        />
+        @if (emailField().invalid() && emailField().touched()) {
+          <p id="email-error" role="alert" class="subscribe-form__error">
+            Voer een geldig e-mailadres in.
+          </p>
+        }
+      </div>
+
+      <!-- Township -->
+      <div class="subscribe-form__field">
+        <label class="subscribe-form__label" for="township">Gemeente</label>
+        <select
+          id="township"
+          class="subscribe-form__select"
+          [formField]="townshipIdField"
+          aria-required="true"
+          aria-describedby="township-error"
+        >
+          <option value="">Kies een gemeente</option>
+          @for (t of townships; track t.id) {
+            <option [value]="t.id">{{ t.name }}</option>
+          }
+        </select>
+        @if (townshipIdField().invalid() && townshipIdField().touched()) {
+          <p id="township-error" role="alert" class="subscribe-form__error">
+            Selecteer een gemeente.
+          </p>
+        }
+      </div>
+
+      <!-- Frequency -->
+      <div class="subscribe-form__field">
+        <fieldset class="subscribe-form__fieldset">
+          <legend class="subscribe-form__legend">
+            Hoe vaak wil je een melding?
+          </legend>
+          <label class="subscribe-form__radio-label">
+            <input
+              type="radio"
+              class="subscribe-form__radio"
+              [formField]="frequencyField"
+              value="immediate"
+              aria-describedby="frequency-error"
+            />
+            Meteen
+          </label>
+          <label class="subscribe-form__radio-label">
+            <input
+              type="radio"
+              class="subscribe-form__radio"
+              [formField]="frequencyField"
+              value="daily"
+              aria-describedby="frequency-error"
+            />
+            Dagelijks overzicht
+          </label>
+        </fieldset>
+        @if (frequencyField().invalid() && frequencyField().touched()) {
+          <p id="frequency-error" role="alert" class="subscribe-form__error">
+            Kies een meldingsfrequentie.
+          </p>
+        }
+      </div>
+
+      <!-- Submit -->
+      <button
+        type="submit"
+        class="subscribe-form__submit"
+        [disabled]="subscribeForm().invalid() || state() === 'loading'"
+        [attr.aria-busy]="state() === 'loading'"
+      >
+        @if (state() === 'loading') {
+          Bezig met aanmelden&hellip;
+        } @else {
+          Aanmelden
+        }
+      </button>
+
+    </form>
+
+    <!-- Privacy link -->
+    <p class="subscribe-section__privacy">
+      <a routerLink="/privacy">Privacybeleid</a>
+    </p>
+  }
+</section>

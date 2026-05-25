@@ -144,6 +144,16 @@ ul { padding-left: 1.5rem; li { margin-bottom: 4px; } }
   gap: 4px;
 }
 
+.form-hint {
+  font-size: .8rem;
+  color: var(--c-text-light);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+}
+
+
 .form-fieldset {
   border: 1.5px solid var(--c-border);
   border-radius: var(--r-md);

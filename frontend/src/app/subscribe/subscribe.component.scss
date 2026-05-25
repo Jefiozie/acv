@@ -43,7 +43,99 @@
   padding: 28px 32px 24px;
 }
 
-/* Mobile adjustments */
+/* ── Onboarding: how it works strip ───────────────────────────────────── */
+.how-it-works {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 20px;
+  background: var(--c-bg);
+  border-bottom: 1px solid var(--c-border);
+  list-style: none;
+  margin: 0;
+
+  &__step {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  &__num {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--c-primary);
+    color: #fff;
+    font-size: .6875rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  &__label {
+    font-size: .8125rem;
+    font-weight: 600;
+    color: var(--c-text-muted);
+    white-space: nowrap;
+  }
+
+  &__sep {
+    color: var(--c-text-light);
+    font-size: .75rem;
+    flex-shrink: 0;
+  }
+}
+
+/* Mobile: stack how-it-works vertically on very small screens */
+@media (max-width: 380px) {
+  .how-it-works {
+    flex-direction: column;
+    gap: 6px;
+    &__sep { transform: rotate(90deg); }
+  }
+}
+
+/* ── Onboarding: success next-steps ──────────────────────────────────── */
+.next-steps {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0 0 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+  width: 100%;
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: .9rem;
+    color: var(--c-text-muted);
+    line-height: 1.5;
+    margin-bottom: 0;
+  }
+}
+
+.next-steps__num {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--c-success);
+  color: #fff;
+  font-size: .6875rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+
 @media (max-width: 520px) {
   .subscribe-card {
     border-radius: var(--r-lg);

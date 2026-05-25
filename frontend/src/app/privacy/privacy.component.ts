@@ -1,9 +1,12 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
-/** Placeholder — will be replaced in plan 03-03. */
 @Component({
-  standalone: true,
   selector: 'app-privacy',
-  template: '<p>Privacy (plan 03-03)</p>',
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterLink],
+  templateUrl: './privacy.component.html',
+  styleUrl: './privacy.component.scss',
 })
 export class PrivacyComponent {}

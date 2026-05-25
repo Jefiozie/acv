@@ -11,19 +11,19 @@ export const routes: Routes = [
   {
     path: 'bevestigen',
     loadComponent: () =>
-      import('./confirm/confirm.component').then((m) => m.ConfirmComponent), // TODO: replaced in plan 03-02
+      import('./confirm/confirm.component').then((m) => m.ConfirmComponent),
   },
   {
     path: 'uitschrijven',
     loadComponent: () =>
       import('./unsubscribe/unsubscribe.component').then(
         (m) => m.UnsubscribeComponent
-      ), // TODO: replaced in plan 03-03
+      ),
   },
   {
     path: 'privacy',
     loadComponent: () =>
-      import('./privacy/privacy.component').then((m) => m.PrivacyComponent), // TODO: replaced in plan 03-03
+      import('./privacy/privacy.component').then((m) => m.PrivacyComponent),
   },
   {
     path: '**',

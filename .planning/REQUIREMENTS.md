@@ -32,7 +32,7 @@
 ### Unsubscribe
 
 - [ ] **UNSUB-01**: Every notification email contains a one-click unsubscribe link (RFC 8058 `List-Unsubscribe-Post` header + footer link)
-- [ ] **UNSUB-02**: Unsubscribe link resolves to a confirmation page in the Angular app
+- [x] **UNSUB-02**: Unsubscribe link resolves to a confirmation page in the Angular app
 - [ ] **UNSUB-03**: Clicking unsubscribe hard-deletes the subscriber record from DynamoDB immediately (GDPR/AVG Art. 17)
 - [ ] **UNSUB-04**: Unsubscribe token is single-use; replayed tokens return a graceful "already unsubscribed" response
 
@@ -59,14 +59,14 @@
 - [x] **FE-01**: Angular 21+ SPA — standalone components, signals, new `@if`/`@for` control flow, no NgModules
 - [ ] **FE-02**: Subscribe form validates email format and requires township + frequency selection before submit
 - [ ] **FE-03**: Form shows success state after submission (instructs user to check email)
-- [ ] **FE-04**: Confirmation page shown when user clicks the confirmation link from email
-- [ ] **FE-05**: Unsubscribed page shown after unsubscribe link is followed
-- [ ] **FE-06**: App is accessible (WCAG AA): keyboard navigable, ARIA labels on form controls
-- [ ] **FE-07**: App is responsive (mobile-first)
+- [x] **FE-04**: Confirmation page shown when user clicks the confirmation link from email
+- [x] **FE-05**: Unsubscribed page shown after unsubscribe link is followed
+- [x] **FE-06**: App is accessible (WCAG AA): keyboard navigable, ARIA labels on form controls
+- [x] **FE-07**: App is responsive (mobile-first)
 
 ### Compliance
 
-- [ ] **COMP-01**: Privacy policy page linked from the subscription form (required under GDPR/AVG)
+- [x] **COMP-01**: Privacy policy page linked from the subscription form (required under GDPR/AVG)
 - [ ] **COMP-02**: Consent timestamp stored with each subscriber record at confirmation
 - [ ] **COMP-03**: Hard-delete on unsubscribe (no soft-delete; no retention)
 
@@ -123,7 +123,7 @@
 | SUB-09 | Phase 2 | Pending |
 | SUB-10 | Phase 2 | Pending |
 | UNSUB-01 | Phase 2 | Pending |
-| UNSUB-02 | Phase 3 | Pending |
+| UNSUB-02 | Phase 3 | Complete |
 | UNSUB-03 | Phase 2 | Pending |
 | UNSUB-04 | Phase 2 | Pending |
 | CHK-01 | Phase 2 | Pending |
@@ -141,11 +141,11 @@
 | FE-01 | Phase 3 | Complete |
 | FE-02 | Phase 3 | Pending |
 | FE-03 | Phase 3 | Pending |
-| FE-04 | Phase 3 | Pending |
-| FE-05 | Phase 3 | Pending |
-| FE-06 | Phase 3 | Pending |
-| FE-07 | Phase 3 | Pending |
-| COMP-01 | Phase 3 | Pending |
+| FE-04 | Phase 3 | Complete |
+| FE-05 | Phase 3 | Complete |
+| FE-06 | Phase 3 | Complete |
+| FE-07 | Phase 3 | Complete |
+| COMP-01 | Phase 3 | Complete |
 | COMP-02 | Phase 2 | Pending |
 | COMP-03 | Phase 2 | Pending |
 

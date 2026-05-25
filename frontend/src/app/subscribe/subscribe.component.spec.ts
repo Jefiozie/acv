@@ -139,11 +139,12 @@ describe('SubscribeComponent', () => {
     expect(alertEl.textContent).not.toMatch(/\d{3}/); // no HTTP status code
   });
 
-  it('township dropdown contains an option with text "Ede"', async () => {
+  it('township dropdown contains all townships', async () => {
     await setup();
-    // getByRole throws if not found
-    const edeOption = screen.getByRole('option', { name: 'Ede' });
-    expect(edeOption).toBeTruthy();
+    const expectedTownships = ['Ede', 'Renkum', 'Renswoude', 'Scherpenzeel', 'Veenendaal', 'Wageningen'];
+    for (const name of expectedTownships) {
+      expect(screen.getByRole('option', { name })).toBeTruthy();
+    }
   });
 
   it('frequency radios include labels "Meteen" and "Dagelijks overzicht"', async () => {

@@ -24,7 +24,7 @@ const PRODUCT = "2";
 const TOWNSHIP = process.env.TOWNSHIP ?? "16"; // default: Ede (16)
 const SITE = "1";
 const LANGUAGE = "nl";
-const LOOKAHEAD_DAYS = 30;
+const LOOKAHEAD_DAYS = 14;
 const CACHE_FILE = "availability_cache.json";
 
 const TELEGRAM_TOKEN = process.env.TELEGRAM_BOT_TOKEN ?? "";

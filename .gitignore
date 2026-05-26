@@ -3,3 +3,15 @@ node_modules/
 dist/
 .env
 .env
+
+# CDK
+cdk.out/
+cdk.context.json
+.cdk.staging/
+
+# Secrets
+.env.local
+*.pem
+
+# Script artifacts
+availability_cache.json

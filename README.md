@@ -68,6 +68,7 @@ npm install
 npm run check
 ```
 
+
 ## Voorbeeld Telegram-bericht
 
 ```
@@ -82,3 +83,37 @@ Datum                   Tijdsloten
                             13:00 - 15:00
 ✅     woensdag 10 juni      08:00 - 10:00
 ```
+
+## Infrastructure
+
+CDK-based AWS deployment (eu-central-1). Two stacks: `AcvStateful` (DynamoDB + SES) and `AcvBackend` (Lambda + EventBridge + API Gateway).
+
+### One-time CDK bootstrap
+
+Before deploying for the first time, check whether the account/region is already bootstrapped:
+
+```bash
+aws cloudformation describe-stacks --stack-name CDKToolkit --region eu-central-1
+```
+
+If that command exits non-zero (stack not found), bootstrap the environment:
+
+```bash
+cd infrastructure && npx cdk bootstrap aws://$CDK_DEFAULT_ACCOUNT/eu-central-1
+```
+
+> ⚠️ Never use root AWS credentials for CDK. Use a scoped IAM user/role with the necessary permissions.
+
+### Deploy
+
+```bash
+cd infrastructure && npx cdk deploy AcvStateful
+cd infrastructure && npx cdk deploy AcvBackend
+```
+
+### Synthesise (local, no credentials required)
+
+```bash
+cd infrastructure && npx cdk synth
+```
+

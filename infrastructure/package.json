@@ -1,0 +1,23 @@
+{
+  "name": "@acv/infrastructure",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "synth": "cdk synth",
+    "deploy": "cdk deploy",
+    "diff": "cdk diff",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "latest",
+    "@types/node": "^22.0.0",
+    "aws-cdk": "^2.257.0",
+    "aws-cdk-lib": "^2.257.0",
+    "constructs": "^10.6.0",
+    "esbuild": "latest",
+    "ts-node": "latest",
+    "typescript": "^5.8.0",
+    "vitest": "latest"
+  }
+}
+

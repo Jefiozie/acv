@@ -1,0 +1,14 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "outDir": "cdk.out/ts",
+    "rootDir": ".",
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true
+  },
+  "include": ["bin/**/*", "lib/**/*"],
+  "exclude": ["node_modules", "cdk.out"]
+}

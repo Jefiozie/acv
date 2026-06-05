@@ -252,10 +252,6 @@ export async function main(): Promise<void> {
       previousPromoPrice: prev?.promoPrice ? formatEur(prev.promoPrice) : null,
     };
   });
-  console.log(
-    `!TELEGRAM_TOKEN ${TELEGRAM_TOKEN} !TELEGRAM_CHAT_ID ${TELEGRAM_CHAT_ID}`,
-  );
-
   if (!TELEGRAM_TOKEN || !TELEGRAM_CHAT_ID) {
     console.error(
       "TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID not set — skipping notification.",

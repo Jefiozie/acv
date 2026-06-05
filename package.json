@@ -4,7 +4,8 @@
   "description": "ACV trailer availability checker",
   "scripts": {
     "check": "tsx src/check-availability.ts",
-    "centerparcs": "tsx src/check-centerparcs.ts"
+    "centerparcs": "tsx src/check-centerparcs.ts",
+    "run": "tsx src/index.ts"
   },
   "devDependencies": {
     "@types/node": "^22.19.19",

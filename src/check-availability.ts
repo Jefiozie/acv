@@ -1,15 +1,9 @@
-import { readFileSync, writeFileSync, existsSync } from "fs";
-import { request } from "https";
+import { loadEnv } from "./shared/env.js";
+import { sendTelegram } from "./shared/telegram.js";
+import { loadCache, saveCache } from "./shared/cache.js";
 
 // Load .env locally if present (ignored in CI where secrets come from environment)
-if (existsSync(".env")) {
-  for (const line of readFileSync(".env", "utf8").split("\n")) {
-    const match = line.match(/^\s*([A-Z_][A-Z0-9_]*)=(.*)$/);
-    if (match && !process.env[match[1]]) {
-      process.env[match[1]] = match[2].replace(/^["']|["']$/g, "").trim();
-    }
-  }
-}
+loadEnv();
 
 // ─── Config ──────────────────────────────────────────────────────────────────
 
@@ -194,62 +188,6 @@ function normalizeTime(text: string): string {
   return text.replace(/:00(?= |-|$)/g, "");
 }
 
-// ─── Cache ────────────────────────────────────────────────────────────────────
-
-function loadCache(): Cache {
-  if (existsSync(CACHE_FILE)) {
-    try {
-      return JSON.parse(readFileSync(CACHE_FILE, "utf8")) as Cache;
-    } catch {
-      // Corrupt cache — start fresh
-    }
-  }
-  return {};
-}
-
-function saveCache(cache: Cache): void {
-  writeFileSync(CACHE_FILE, JSON.stringify(cache, null, 2), "utf8");
-}
-
-// ─── Telegram ─────────────────────────────────────────────────────────────────
-
-function sendTelegram(message: string): Promise<void> {
-  return new Promise((resolve, reject) => {
-    const body = JSON.stringify({
-      chat_id: TELEGRAM_CHAT_ID,
-      text: message,
-      parse_mode: "HTML",
-    });
-
-    const req = request(
-      {
-        hostname: "api.telegram.org",
-        path: `/bot${TELEGRAM_TOKEN}/sendMessage`,
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Content-Length": Buffer.byteLength(body),
-        },
-      },
-      (res) => {
-        let data = "";
-        res.on("data", (chunk: Buffer) => (data += chunk.toString()));
-        res.on("end", () => {
-          const parsed = JSON.parse(data) as { ok: boolean; description?: string };
-          if (parsed.ok) {
-            resolve();
-          } else {
-            reject(new Error(`Telegram error: ${parsed.description}`));
-          }
-        });
-      }
-    );
-
-    req.on("error", reject);
-    req.write(body);
-    req.end();
-  });
-}
 
 // ─── Message builder ──────────────────────────────────────────────────────────
 
@@ -289,7 +227,7 @@ function buildMessage(rows: SlotRow[]): string {
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
-async function main(): Promise<void> {
+export async function main(): Promise<void> {
   console.log("Fetching ACV trailer calendar…");
 
   const cookieString = await getSession();
@@ -328,7 +266,7 @@ async function main(): Promise<void> {
   }
 
   // Find dates/slots not seen before
-  const previousCache = loadCache();
+  const previousCache = loadCache<Cache>(CACHE_FILE, {});
   const newOrUpdated = upcomingAvailable.filter((day) => {
     const prev = previousCache[day.date];
     if (!prev) return true; // new date
@@ -351,12 +289,12 @@ async function main(): Promise<void> {
         slots: currentCache[day.date].slots,
         isNew: newDates.has(day.date),
       }));
-      await sendTelegram(buildMessage(rows));
+      await sendTelegram(TELEGRAM_TOKEN, TELEGRAM_CHAT_ID, buildMessage(rows));
       console.log(`Telegram sent for ${newOrUpdated.length} new/updated slot(s).`);
     }
   }
 
-  saveCache(currentCache);
+  saveCache<Cache>(CACHE_FILE, currentCache);
   console.log("Cache updated.");
 }
 

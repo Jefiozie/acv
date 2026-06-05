@@ -1,15 +1,9 @@
-import { request } from "https";
-import { existsSync, readFileSync, writeFileSync } from "fs";
+import { loadEnv } from "./shared/env.js";
+import { sendTelegram } from "./shared/telegram.js";
+import { loadCache, saveCache } from "./shared/cache.js";
 
 // Load .env locally if present
-if (existsSync(".env")) {
-  for (const line of readFileSync(".env", "utf8").split("\n")) {
-    const match = line.match(/^\s*([A-Z_][A-Z0-9_]*)=(.*)$/);
-    if (match && !process.env[match[1]]) {
-      process.env[match[1]] = match[2].replace(/^["']|["']$/g, "").trim();
-    }
-  }
-}
+loadEnv();
 
 // ─── Config ──────────────────────────────────────────────────────────────────
 
@@ -65,24 +59,6 @@ interface CachedCottage {
 
 type StateCache = Record<string, CachedCottage>;
 
-// ─── State cache ──────────────────────────────────────────────────────────────
-
-function loadState(): StateCache {
-  if (existsSync(CACHE_FILE)) {
-    try {
-      return JSON.parse(readFileSync(CACHE_FILE, "utf8")) as StateCache;
-    } catch {
-      // Corrupt cache — start fresh
-    }
-  }
-  return {};
-}
-
-function saveState(state: StateCache): void {
-  writeFileSync(CACHE_FILE, JSON.stringify(state, null, 2), "utf8");
-}
-
-// ─── Fetch ────────────────────────────────────────────────────────────────────
 
 async function fetchPage(): Promise<string> {
   const res = await fetch(URL, {
@@ -120,46 +96,6 @@ function parseTrackResultItems(html: string): TrackResultItem[] {
   }
 
   return items;
-}
-
-// ─── Telegram ─────────────────────────────────────────────────────────────────
-
-function sendTelegram(message: string): Promise<void> {
-  return new Promise((resolve, reject) => {
-    const body = JSON.stringify({
-      chat_id: TELEGRAM_CHAT_ID,
-      text: message,
-      parse_mode: "HTML",
-    });
-
-    const req = request(
-      {
-        hostname: "api.telegram.org",
-        path: `/bot${TELEGRAM_TOKEN}/sendMessage`,
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Content-Length": Buffer.byteLength(body),
-        },
-      },
-      (res) => {
-        let data = "";
-        res.on("data", (chunk: Buffer) => (data += chunk.toString()));
-        res.on("end", () => {
-          const parsed = JSON.parse(data) as { ok: boolean; description?: string };
-          if (parsed.ok) {
-            resolve();
-          } else {
-            reject(new Error(`Telegram error: ${parsed.description}`));
-          }
-        });
-      }
-    );
-
-    req.on("error", reject);
-    req.write(body);
-    req.end();
-  });
 }
 
 // ─── Message builder ──────────────────────────────────────────────────────────
@@ -249,12 +185,12 @@ function buildMessage(enriched: EnrichedItem[]): string {
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
-async function main(): Promise<void> {
+export async function main(): Promise<void> {
   console.log("Fetching Center Parcs Het Heijderbos availability…");
 
   const html = await fetchPage();
   const items = parseTrackResultItems(html);
-  const previousState = loadState();
+  const previousState = loadCache<StateCache>(CACHE_FILE, {});
   const now = new Date().toISOString();
 
   console.log(`Found ${items.length} cottage(s) available.`);
@@ -293,11 +229,11 @@ async function main(): Promise<void> {
     console.error("TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID not set — skipping notification.");
   } else {
     const message = buildMessage(enriched);
-    await sendTelegram(message);
+    await sendTelegram(TELEGRAM_TOKEN, TELEGRAM_CHAT_ID, message);
     console.log("Telegram notification sent.");
   }
 
-  saveState(newState);
+  saveCache<StateCache>(CACHE_FILE, newState);
   console.log("State cache updated.");
 }
 

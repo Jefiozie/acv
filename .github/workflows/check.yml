@@ -49,9 +49,9 @@ jobs:
 
       - name: Run ACV trailer availability check
         env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          TOWNSHIP: ${{ secrets.TOWNSHIP || '16' }}
+          TELEGRAM_BOT_TOKEN: ${{ vars.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ vars.TELEGRAM_CHAT_ID }}
+          TOWNSHIP: ${{ vars.TOWNSHIP || '16' }}
         run: npm run run -- --checker=acv
 
       - name: Commit updated availability cache
@@ -84,8 +84,8 @@ jobs:
 
       - name: Run Center Parcs availability check
         env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_BOT_TOKEN: ${{ vars.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ vars.TELEGRAM_CHAT_ID }}
         run: npm run run -- --checker=centerparcs
 
       - name: Commit updated state cache

@@ -1,4 +1,4 @@
-name: Check Center Parcs Availability
+name: Check Availability
 
 on:
   schedule:
@@ -15,9 +15,54 @@ on:
     - cron: "0 20 * * *"
   # Allow manual trigger for testing
   workflow_dispatch:
+    inputs:
+      checker:
+        description: "Which checker to run (leave empty to run both)"
+        required: false
+        default: ""
+        type: choice
+        options:
+          - ""
+          - acv
+          - centerparcs
 
 jobs:
-  check:
+  check-acv:
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.checker == '' || github.event.inputs.checker == 'acv' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dev dependencies
+        run: npm ci
+
+      - name: Run ACV trailer availability check
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: npm run run -- --checker=acv
+
+      - name: Commit updated availability cache
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add availability_cache.json
+          git diff --staged --quiet || git commit -m "chore: update acv availability cache [skip ci]"
+          git push
+
+  check-centerparcs:
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.checker == '' || github.event.inputs.checker == 'centerparcs' }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
@@ -40,7 +85,7 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: npm run centerparcs
+        run: npm run run -- --checker=centerparcs
 
       - name: Commit updated state cache
         run: |

@@ -11,6 +11,7 @@ const arg = process.argv.find((a) => a.startsWith("--checker="));
 const checker = (arg?.split("=")[1] ?? process.env.CHECKER ?? "acv").toLowerCase();
 
 async function run(): Promise<void> {
+  console.log(`Running checker: ${checker}`);
   if (checker === "acv") {
     await runAcv();
   } else if (checker === "centerparcs") {

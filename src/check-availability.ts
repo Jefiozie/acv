@@ -298,7 +298,10 @@ export async function main(): Promise<void> {
   console.log("Cache updated.");
 }
 
-main().catch((err) => {
-  console.error("Fatal error:", err);
-  process.exit(1);
-});
+// Run directly (not when imported as a module)
+if (process.argv[1]?.endsWith("check-availability.ts") || process.argv[1]?.endsWith("check-availability.js")) {
+  main().catch((err) => {
+    console.error("Fatal error:", err);
+    process.exit(1);
+  });
+}

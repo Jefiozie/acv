@@ -237,7 +237,10 @@ export async function main(): Promise<void> {
   console.log("State cache updated.");
 }
 
-main().catch((err) => {
-  console.error("Fatal error:", err);
-  process.exit(1);
-});
+// Run directly (not when imported as a module)
+if (process.argv[1]?.endsWith("check-centerparcs.ts") || process.argv[1]?.endsWith("check-centerparcs.js")) {
+  main().catch((err) => {
+    console.error("Fatal error:", err);
+    process.exit(1);
+  });
+}

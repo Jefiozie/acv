@@ -63,7 +63,6 @@ interface CachedCottage {
 
 type StateCache = Record<string, CachedCottage>;
 
-
 async function fetchPage(): Promise<string> {
   // Use curl — its TLS fingerprint bypasses bot-detection that blocks Node.js fetch
   const { stdout } = await execFileAsync("curl", [
@@ -71,18 +70,29 @@ async function fetchPage(): Promise<string> {
     "--fail",
     "--compressed",
     "--globoff",
-    "--max-time", "30",
+    "--max-time",
+    "30",
     "--location",
-    "--header", "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-    "--header", "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
-    "--header", "Accept-Language: nl-NL,nl;q=0.9,en-US;q=0.8,en;q=0.7",
-    "--header", "Cache-Control: no-cache",
-    "--header", "Pragma: no-cache",
-    "--header", "Sec-Fetch-Dest: document",
-    "--header", "Sec-Fetch-Mode: navigate",
-    "--header", "Sec-Fetch-Site: none",
-    "--header", "Sec-Fetch-User: ?1",
-    "--header", "Upgrade-Insecure-Requests: 1",
+    "--header",
+    "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+    "--header",
+    "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+    "--header",
+    "Accept-Language: nl-NL,nl;q=0.9,en-US;q=0.8,en;q=0.7",
+    "--header",
+    "Cache-Control: no-cache",
+    "--header",
+    "Pragma: no-cache",
+    "--header",
+    "Sec-Fetch-Dest: document",
+    "--header",
+    "Sec-Fetch-Mode: navigate",
+    "--header",
+    "Sec-Fetch-Site: none",
+    "--header",
+    "Sec-Fetch-User: ?1",
+    "--header",
+    "Upgrade-Insecure-Requests: 1",
     URL,
   ]);
 
@@ -147,10 +157,11 @@ function buildMessage(enriched: EnrichedItem[]): string {
   const statusParts: string[] = [];
   if (newCount > 0) statusParts.push(`${newCount} nieuw`);
   if (changedCount > 0) statusParts.push(`${changedCount} prijswijziging`);
-  const statusSuffix = statusParts.length > 0 ? ` · ${statusParts.join(", ")}` : "";
+  const statusSuffix =
+    statusParts.length > 0 ? ` · ${statusParts.join(", ")}` : "";
 
   lines.push(
-    `🏕️ <b>Center Parcs Het Heijderbos — ${enriched.length} cottage(s) beschikbaar${statusSuffix}!</b>`
+    `🏕️ <b>Center Parcs Het Heijderbos — ${enriched.length} cottage(s) beschikbaar${statusSuffix}!</b>`,
   );
   lines.push(`<i>28 dec 2026 – 1 jan 2027 · 2 volwassenen + 2 kinderen</i>`);
   lines.push(`<i>Gecontroleerd op ${now}</i>`);
@@ -166,12 +177,12 @@ function buildMessage(enriched: EnrichedItem[]): string {
 
     const badge = isNew ? " 🆕" : isPriceChange ? " 💰" : "";
     lines.push(
-      `🏠 <b>${housing.comfortLevel.name} — ${housing.name}</b> (<code>${housing.code}</code>)${badge}`
+      `🏠 <b>${housing.comfortLevel.name} — ${housing.name}</b> (<code>${housing.code}</code>)${badge}`,
     );
 
     if (promoPrice && discount) {
       lines.push(
-        `   💶 <s>${originalPrice}</s> → <b>${promoPrice}</b> (${discount}% korting)`
+        `   💶 <s>${originalPrice}</s> → <b>${promoPrice}</b> (${discount}% korting)`,
       );
     } else {
       lines.push(`   💶 <b>${originalPrice}</b>`);
@@ -185,13 +196,13 @@ function buildMessage(enriched: EnrichedItem[]): string {
       lines.push(`   🏷️ ${actionCode.name}`);
     }
 
-    lines.push(`   👥 Max. ${cache.maxPersons} personen · Voorraad: ${cache.stock}`);
+    lines.push(
+      `   👥 Max. ${cache.maxPersons} personen · Voorraad: ${cache.stock}`,
+    );
     lines.push("");
   }
 
-  lines.push(
-    `🔗 <a href="${URL.split("?")[0]}">Bekijk op centerparcs.nl</a>`
-  );
+  lines.push(`🔗 <a href="${URL.split("?")[0]}">Bekijk op centerparcs.nl</a>`);
 
   return lines.join("\n");
 }
@@ -227,7 +238,11 @@ export async function main(): Promise<void> {
 
     console.log(
       `  ${code} · ${item.housing.comfortLevel.name} · ${item.housing.name} · €${originalPrice}` +
-        (isNew ? " [NEW]" : isPriceChange ? ` [PRICE CHANGE: was ${prev!.promoPrice}]` : "")
+        (isNew
+          ? " [NEW]"
+          : isPriceChange
+            ? ` [PRICE CHANGE: was ${prev!.promoPrice}]`
+            : ""),
     );
 
     return {
@@ -237,9 +252,14 @@ export async function main(): Promise<void> {
       previousPromoPrice: prev?.promoPrice ? formatEur(prev.promoPrice) : null,
     };
   });
+  console.log(
+    `!TELEGRAM_TOKEN ${TELEGRAM_TOKEN} !TELEGRAM_CHAT_ID ${TELEGRAM_CHAT_ID}`,
+  );
 
   if (!TELEGRAM_TOKEN || !TELEGRAM_CHAT_ID) {
-    console.error("TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID not set — skipping notification.");
+    console.error(
+      "TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID not set — skipping notification.",
+    );
   } else {
     const message = buildMessage(enriched);
     await sendTelegram(TELEGRAM_TOKEN, TELEGRAM_CHAT_ID, message);
@@ -251,7 +271,10 @@ export async function main(): Promise<void> {
 }
 
 // Run directly (not when imported as a module)
-if (process.argv[1]?.endsWith("check-centerparcs.ts") || process.argv[1]?.endsWith("check-centerparcs.js")) {
+if (
+  process.argv[1]?.endsWith("check-centerparcs.ts") ||
+  process.argv[1]?.endsWith("check-centerparcs.js")
+) {
   main().catch((err) => {
     console.error("Fatal error:", err);
     process.exit(1);

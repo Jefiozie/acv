@@ -1,6 +1,10 @@
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 import { loadEnv } from "./shared/env.js";
 import { sendTelegram } from "./shared/telegram.js";
 import { loadCache, saveCache } from "./shared/cache.js";
+
+const execFileAsync = promisify(execFile);
 
 // Load .env locally if present
 loadEnv();
@@ -61,23 +65,31 @@ type StateCache = Record<string, CachedCottage>;
 
 
 async function fetchPage(): Promise<string> {
-  const res = await fetch(URL, {
-    headers: {
-      "User-Agent":
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36",
-      Accept:
-        "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-      "Accept-Language": "en-US,en;q=0.9",
-      Connection: "keep-alive",
-      "Upgrade-Insecure-Requests": "1",
-    },
-  });
+  // Use curl — its TLS fingerprint bypasses bot-detection that blocks Node.js fetch
+  const { stdout } = await execFileAsync("curl", [
+    "--silent",
+    "--fail",
+    "--compressed",
+    "--max-time", "30",
+    "--location",
+    "--header", "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+    "--header", "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+    "--header", "Accept-Language: nl-NL,nl;q=0.9,en-US;q=0.8,en;q=0.7",
+    "--header", "Cache-Control: no-cache",
+    "--header", "Pragma: no-cache",
+    "--header", "Sec-Fetch-Dest: document",
+    "--header", "Sec-Fetch-Mode: navigate",
+    "--header", "Sec-Fetch-Site: none",
+    "--header", "Sec-Fetch-User: ?1",
+    "--header", "Upgrade-Insecure-Requests: 1",
+    URL,
+  ]);
 
-  if (!res.ok) {
-    throw new Error(`HTTP ${res.status} fetching Center Parcs page`);
+  if (!stdout) {
+    throw new Error("Empty response fetching Center Parcs page");
   }
 
-  return res.text();
+  return stdout;
 }
 
 // ─── Parser ───────────────────────────────────────────────────────────────────

@@ -54,14 +54,30 @@ interface TrackResultItem {
   offer: { name: string };
 }
 
-/** Persisted state per cottage code */
-interface CachedCottage {
-  promoPrice: string | null;
+/** One snapshot entry per day */
+interface PriceSnapshot {
+  date: string;       // YYYY-MM-DD
   originalPrice: string;
-  firstSeen: string; // ISO timestamp
+  promoPrice: string | null;
+  discount: number | null;
+  stock: number;
+}
+
+/** Persisted state per cottage code — now keeps a daily history */
+interface CachedCottage {
+  firstSeen: string;            // ISO timestamp
+  latestPromoPrice: string | null;
+  latestOriginalPrice: string;
+  history: PriceSnapshot[];     // one entry per day, newest last
 }
 
 type StateCache = Record<string, CachedCottage>;
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function todayDate(): string {
+  return new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Amsterdam" }); // YYYY-MM-DD
+}
 
 async function fetchPage(): Promise<string> {
   // Use curl — its TLS fingerprint bypasses bot-detection that blocks Node.js fetch
@@ -134,7 +150,7 @@ interface EnrichedItem {
   previousPromoPrice: string | null;
 }
 
-function buildMessage(enriched: EnrichedItem[]): string {
+function buildMessage(enriched: EnrichedItem[], stateCache: StateCache): string {
   const now = new Date().toLocaleString("nl-NL", {
     timeZone: "Europe/Amsterdam",
     day: "numeric",
@@ -199,6 +215,20 @@ function buildMessage(enriched: EnrichedItem[]): string {
     lines.push(
       `   👥 Max. ${cache.maxPersons} personen · Voorraad: ${cache.stock}`,
     );
+
+    // Show last 3 days of history if available
+    const history = stateCache[housing.code]?.history ?? [];
+    if (history.length > 1) {
+      const recent = history.slice(-3);
+      const historyStr = recent
+        .map((s) => {
+          const price = s.promoPrice ? formatEur(s.promoPrice) : formatEur(s.originalPrice);
+          return `${s.date}: ${price}`;
+        })
+        .join(" → ");
+      lines.push(`   📈 ${historyStr}`);
+    }
+
     lines.push("");
   }
 
@@ -216,24 +246,40 @@ export async function main(): Promise<void> {
   const items = parseTrackResultItems(html);
   const previousState = loadCache<StateCache>(CACHE_FILE, {});
   const now = new Date().toISOString();
+  const today = todayDate();
 
   console.log(`Found ${items.length} cottage(s) available.`);
 
   // Enrich items with change detection and build new state
-  const newState: StateCache = {};
+  const newState: StateCache = { ...previousState }; // carry over cottages no longer listed
   const enriched: EnrichedItem[] = items.map((item) => {
     const code = item.housing.code;
     const promoPrice = item.cache.price.promo?.value ?? null;
     const originalPrice = item.cache.price.original.value;
+    const discount = item.cache.price.discount ?? null;
+    const stock = item.cache.stock;
     const prev = previousState[code];
 
     const isNew = !prev;
-    const isPriceChange = !!prev && prev.promoPrice !== promoPrice;
+    const isPriceChange = !!prev && prev.latestPromoPrice !== promoPrice;
+
+    // Build updated history: replace today's entry if it exists, else append
+    const existingHistory: PriceSnapshot[] = prev?.history ?? [];
+    const todaySnapshot: PriceSnapshot = {
+      date: today,
+      originalPrice,
+      promoPrice,
+      discount,
+      stock,
+    };
+    const historyWithoutToday = existingHistory.filter((s) => s.date !== today);
+    const updatedHistory = [...historyWithoutToday, todaySnapshot];
 
     newState[code] = {
-      promoPrice,
-      originalPrice,
       firstSeen: prev?.firstSeen ?? now,
+      latestPromoPrice: promoPrice,
+      latestOriginalPrice: originalPrice,
+      history: updatedHistory,
     };
 
     console.log(
@@ -241,7 +287,7 @@ export async function main(): Promise<void> {
         (isNew
           ? " [NEW]"
           : isPriceChange
-            ? ` [PRICE CHANGE: was ${prev!.promoPrice}]`
+            ? ` [PRICE CHANGE: was ${prev!.latestPromoPrice}]`
             : ""),
     );
 
@@ -249,15 +295,16 @@ export async function main(): Promise<void> {
       item,
       isNew,
       isPriceChange,
-      previousPromoPrice: prev?.promoPrice ? formatEur(prev.promoPrice) : null,
+      previousPromoPrice: prev?.latestPromoPrice ? formatEur(prev.latestPromoPrice) : null,
     };
   });
+
   if (!TELEGRAM_TOKEN || !TELEGRAM_CHAT_ID) {
     console.error(
       "TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID not set — skipping notification.",
     );
   } else {
-    const message = buildMessage(enriched);
+    const message = buildMessage(enriched, newState);
     await sendTelegram(TELEGRAM_TOKEN, TELEGRAM_CHAT_ID, message);
     console.log("Telegram notification sent.");
   }

@@ -10,6 +10,13 @@
         "promoPrice": "1551",
         "discount": 20,
         "stock": 55
+      },
+      {
+        "date": "2026-06-18",
+        "originalPrice": "1923",
+        "promoPrice": "1551",
+        "discount": 20,
+        "stock": 55
       }
     ]
   },
@@ -24,6 +31,13 @@
         "promoPrice": "1684",
         "discount": 20,
         "stock": 83
+      },
+      {
+        "date": "2026-06-18",
+        "originalPrice": "2088",
+        "promoPrice": "1684",
+        "discount": 20,
+        "stock": 83
       }
     ]
   },
@@ -34,6 +48,13 @@
     "history": [
       {
         "date": "2026-06-17",
+        "originalPrice": "2153",
+        "promoPrice": "1735",
+        "discount": 20,
+        "stock": 49
+      },
+      {
+        "date": "2026-06-18",
         "originalPrice": "2153",
         "promoPrice": "1735",
         "discount": 20,

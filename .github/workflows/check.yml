@@ -63,7 +63,11 @@ jobs:
           git push
 
   check-centerparcs:
-    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.checker == '' || github.event.inputs.checker == 'centerparcs' }}
+    needs: check-acv
+    if: |
+      always() &&
+      (needs.check-acv.result == 'success' || needs.check-acv.result == 'skipped') &&
+      (github.event_name != 'workflow_dispatch' || github.event.inputs.checker == '' || github.event.inputs.checker == 'centerparcs')
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
@@ -72,6 +76,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Pull latest changes
+        run: git pull --rebase
 
       - name: Set up Node.js
         uses: actions/setup-node@v4

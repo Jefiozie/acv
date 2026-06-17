@@ -15,3 +15,6 @@ cdk.context.json
 
 # Script artifacts
 availability_cache.json
+
+# Local dev copies of JSON data in docs/
+docs/*.json

@@ -5,7 +5,8 @@
   "scripts": {
     "check": "tsx src/check-availability.ts",
     "centerparcs": "tsx src/check-centerparcs.ts",
-    "run": "tsx src/index.ts"
+    "run": "tsx src/index.ts",
+    "dev": "cp centerparcs_cache.json docs/ && cp availability_cache.json docs/ && python3 -m http.server 4000 --directory docs"
   },
   "devDependencies": {
     "@types/node": "^22.19.19",

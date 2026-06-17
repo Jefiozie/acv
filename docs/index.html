@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="nl" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="header-left">
+        <h1>🏕️ Tracker</h1>
+        <span id="last-updated" class="last-updated"></span>
+      </div>
+      <div class="header-right">
+        <span id="refresh-indicator" class="refresh-indicator" aria-hidden="true">⟳</span>
+        <button id="theme-toggle" class="theme-toggle" aria-label="Thema wisselen">🌙</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <h2 class="section-title">Center Parcs Prijzen</h2>
+      <div id="centerparcs-charts" class="charts-grid">
+        <p class="empty">Laden…</p>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">Aanhanger Beschikbaarheid</h2>
+      <div id="availability-grid" class="avail-grid">
+        <p class="empty">Laden…</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

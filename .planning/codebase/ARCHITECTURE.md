@@ -129,7 +129,7 @@
 
 ## Architectural Constraints
 
-- **Runtime:** Node.js 22+ (uses native `fetch`, `Promise.all`, ES2022 target)
+- **Runtime:** Node.js 24+ (uses native `fetch`, `Promise.all`, ES2022 target)
 - **Threading:** Single-threaded; two calendar month fetches are parallelised with `Promise.all` but everything else is sequential
 - **Global state:** Module-level constants only (config values read from `process.env` at startup); no mutable globals
 - **No build step:** `tsx` runs TypeScript directly; `tsc` is present for type-checking only

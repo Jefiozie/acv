@@ -1,17 +1,44 @@
 {
   "HB1923": {
-    "promoPrice": "1551",
-    "originalPrice": "1923",
-    "firstSeen": "2026-06-05T19:23:26.258Z"
+    "firstSeen": "2026-06-05T19:23:26.258Z",
+    "latestPromoPrice": "1551",
+    "latestOriginalPrice": "1923",
+    "history": [
+      {
+        "date": "2026-06-17",
+        "originalPrice": "1923",
+        "promoPrice": "1551",
+        "discount": 20,
+        "stock": 55
+      }
+    ]
   },
   "HB1932": {
-    "promoPrice": "1684",
-    "originalPrice": "2088",
-    "firstSeen": "2026-06-05T19:23:26.258Z"
+    "firstSeen": "2026-06-05T19:23:26.258Z",
+    "latestPromoPrice": "1684",
+    "latestOriginalPrice": "2088",
+    "history": [
+      {
+        "date": "2026-06-17",
+        "originalPrice": "2088",
+        "promoPrice": "1684",
+        "discount": 20,
+        "stock": 83
+      }
+    ]
   },
   "HB1924": {
-    "promoPrice": "1735",
-    "originalPrice": "2153",
-    "firstSeen": "2026-06-05T19:23:26.258Z"
+    "firstSeen": "2026-06-05T19:23:26.258Z",
+    "latestPromoPrice": "1735",
+    "latestOriginalPrice": "2153",
+    "history": [
+      {
+        "date": "2026-06-17",
+        "originalPrice": "2153",
+        "promoPrice": "1735",
+        "discount": 20,
+        "stock": 49
+      }
+    ]
   }
 }

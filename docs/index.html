@@ -5,6 +5,45 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tracker</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    .tabs {
+      display: flex;
+      gap: 4px;
+      padding: 0 1rem;
+      border-bottom: 2px solid var(--border, #e2e8f0);
+      margin-bottom: 1.5rem;
+    }
+
+    .tab-btn {
+      padding: 0.6rem 1.2rem;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text-muted, #64748b);
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      transition: color 0.15s, border-color 0.15s;
+    }
+
+    .tab-btn:hover {
+      color: var(--text, #1e293b);
+    }
+
+    .tab-btn.active {
+      color: var(--accent, #2563eb);
+      border-bottom-color: var(--accent, #2563eb);
+    }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+  </style>
 </head>
 <body>
 
@@ -22,22 +61,40 @@
   </header>
 
   <main>
-    <section>
-      <h2 class="section-title">Center Parcs Prijzen</h2>
+    <nav class="tabs" role="tablist">
+      <button class="tab-btn active" role="tab" aria-selected="true"  data-tab="centerparcs">🏕️ Center Parcs Prijzen</button>
+      <button class="tab-btn"        role="tab" aria-selected="false" data-tab="aanhanger">🚗 Aanhanger Beschikbaarheid</button>
+    </nav>
+
+    <div class="tab-panel active" id="tab-centerparcs" role="tabpanel">
       <div id="centerparcs-charts" class="charts-grid">
         <p class="empty">Laden…</p>
       </div>
-    </section>
+    </div>
 
-    <section>
-      <h2 class="section-title">Aanhanger Beschikbaarheid</h2>
+    <div class="tab-panel" id="tab-aanhanger" role="tabpanel">
       <div id="availability-grid" class="avail-grid">
         <p class="empty">Laden…</p>
       </div>
-    </section>
+    </div>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
   <script src="app.js"></script>
+  <script>
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+      });
+    });
+  </script>
 </body>
 </html>

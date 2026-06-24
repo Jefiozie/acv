@@ -68,13 +68,16 @@
       const originals = history.map(h => parseFloat(h.originalPrice));
       const promos = history.map(h => parseFloat(h.promoPrice));
       const latest = history[history.length - 1] || {};
+      const displayName = info.formattedName || id;
+      const codeLine = info.formattedName ? `<span class="booking-code">Code: ${id}</span>` : '';
 
       const card = document.createElement('div');
       card.className = 'chart-card';
       card.innerHTML = `
         <div class="card-header">
           <div>
-            <h3 class="booking-id">${id}</h3>
+            <h3 class="booking-id">${displayName}</h3>
+            ${codeLine}
             <span class="first-seen">Eerste keer gezien: ${new Date(info.firstSeen).toLocaleDateString('nl-NL')}</span>
           </div>
           <div class="price-badges">

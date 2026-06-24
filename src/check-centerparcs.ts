@@ -69,7 +69,11 @@ interface CachedCottage {
   latestPromoPrice: string | null;
   latestOriginalPrice: string;
   history: PriceSnapshot[];     // one entry per day, newest last
+  formattedName: string;        // Cached formatted display name (comfort level - name)
 }
+
+/** Housing code to formatted name mapping */
+type HousingMapping = Record<string, string>;
 
 type StateCache = Record<string, CachedCottage>;
 
@@ -184,16 +188,19 @@ function buildMessage(enriched: EnrichedItem[], stateCache: StateCache): string 
   lines.push("");
 
   for (const { item, isNew, isPriceChange, previousPromoPrice } of enriched) {
-    const { housing, cache, actionCode } = item;
+    const { housing, cache } = item;
     const originalPrice = formatEur(cache.price.original.value);
     const promoPrice = cache.price.promo
       ? formatEur(cache.price.promo.value)
       : null;
     const discount = cache.price.discount;
 
+    const cached = stateCache[housing.code];
+    const formattedName = cached?.formattedName ?? `${housing.comfortLevel.name} — ${housing.name}`;
+
     const badge = isNew ? " 🆕" : isPriceChange ? " 💰" : "";
     lines.push(
-      `🏠 <b>${housing.comfortLevel.name} — ${housing.name}</b> (<code>${housing.code}</code>)${badge}`,
+      `🏠 <b>${formattedName}</b> (<code>${housing.code}</code>)${badge}`,
     );
 
     if (promoPrice && discount) {
@@ -208,8 +215,8 @@ function buildMessage(enriched: EnrichedItem[], stateCache: StateCache): string 
       lines.push(`   ↳ was ${previousPromoPrice}`);
     }
 
-    if (actionCode) {
-      lines.push(`   🏷️ ${actionCode.name}`);
+    if (item.actionCode) {
+      lines.push(`   🏷️ ${item.actionCode.name}`);
     }
 
     lines.push(
@@ -235,6 +242,34 @@ function buildMessage(enriched: EnrichedItem[], stateCache: StateCache): string 
   lines.push(`🔗 <a href="${URL.split("?")[0]}">Bekijk op centerparcs.nl</a>`);
 
   return lines.join("\n");
+}
+
+// ─── Housing mapping export ───────────────────────────────────────────────────
+
+/**
+ * Extract all housing code -> formatted name mappings from the cache.
+ * This can be used by the API and frontend to display proper housing names.
+ */
+export function getHousingMappings(): HousingMapping {
+  const cache = loadCache<StateCache>(CACHE_FILE, {});
+  const mapping: HousingMapping = {};
+  
+  for (const [code, cottage] of Object.entries(cache)) {
+    if (cottage.formattedName) {
+      mapping[code] = cottage.formattedName;
+    }
+  }
+  
+  return mapping;
+}
+
+/**
+ * Get formatted name for a specific housing code.
+ * Returns the cached formatted name or undefined if not found.
+ */
+export function getHousingName(code: string): string | undefined {
+  const cache = loadCache<StateCache>(CACHE_FILE, {});
+  return cache[code]?.formattedName;
 }
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
@@ -275,15 +310,19 @@ export async function main(): Promise<void> {
     const historyWithoutToday = existingHistory.filter((s) => s.date !== today);
     const updatedHistory = [...historyWithoutToday, todaySnapshot];
 
+    // Format the housing display name
+    const formattedName = `${item.housing.comfortLevel.name} — ${item.housing.name}`;
+
     newState[code] = {
       firstSeen: prev?.firstSeen ?? now,
       latestPromoPrice: promoPrice,
       latestOriginalPrice: originalPrice,
       history: updatedHistory,
+      formattedName,
     };
 
     console.log(
-      `  ${code} · ${item.housing.comfortLevel.name} · ${item.housing.name} · €${originalPrice}` +
+      `  ${code} · ${formattedName} · €${originalPrice}` +
         (isNew
           ? " [NEW]"
           : isPriceChange

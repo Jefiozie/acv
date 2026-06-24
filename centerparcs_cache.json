@@ -60,7 +60,8 @@
         "discount": 20,
         "stock": 55
       }
-    ]
+    ],
+    "formattedName": "Premium — 4 personen"
   },
   "HB1932": {
     "firstSeen": "2026-06-05T19:23:26.258Z",
@@ -123,7 +124,8 @@
         "discount": 20,
         "stock": 81
       }
-    ]
+    ],
+    "formattedName": "VIP — 4 personen"
   },
   "HB1924": {
     "firstSeen": "2026-06-05T19:23:26.258Z",
@@ -186,6 +188,7 @@
         "discount": 20,
         "stock": 48
       }
-    ]
+    ],
+    "formattedName": "Premium — 6 Personen"
   }
 }

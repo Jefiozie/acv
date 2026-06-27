@@ -1,8 +1,8 @@
 {
   "HB1923": {
     "firstSeen": "2026-06-05T19:23:26.258Z",
-    "latestPromoPrice": "1553",
-    "latestOriginalPrice": "1925",
+    "latestPromoPrice": "1555",
+    "latestOriginalPrice": "1927",
     "history": [
       {
         "date": "2026-06-17",
@@ -76,10 +76,10 @@
       },
       {
         "date": "2026-06-27",
-        "originalPrice": "1925",
-        "promoPrice": "1553",
+        "originalPrice": "1927",
+        "promoPrice": "1555",
         "discount": 20,
-        "stock": 54
+        "stock": 53
       }
     ],
     "formattedName": "Premium — 4 personen"
@@ -249,7 +249,7 @@
         "originalPrice": "2157",
         "promoPrice": "1738",
         "discount": 20,
-        "stock": 48
+        "stock": 46
       }
     ],
     "formattedName": "Premium — 6 Personen"

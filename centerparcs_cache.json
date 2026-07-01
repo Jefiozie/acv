@@ -1,8 +1,8 @@
 {
   "HB1923": {
     "firstSeen": "2026-06-05T19:23:26.258Z",
-    "latestPromoPrice": "1555",
-    "latestOriginalPrice": "1927",
+    "latestPromoPrice": "1557",
+    "latestOriginalPrice": "1929",
     "history": [
       {
         "date": "2026-06-17",
@@ -104,8 +104,8 @@
       },
       {
         "date": "2026-07-01",
-        "originalPrice": "1927",
-        "promoPrice": "1555",
+        "originalPrice": "1929",
+        "promoPrice": "1557",
         "discount": 20,
         "stock": 53
       }
@@ -227,8 +227,8 @@
   },
   "HB1924": {
     "firstSeen": "2026-06-05T19:23:26.258Z",
-    "latestPromoPrice": "1738",
-    "latestOriginalPrice": "2157",
+    "latestPromoPrice": "1748",
+    "latestOriginalPrice": "2169",
     "history": [
       {
         "date": "2026-06-17",
@@ -330,10 +330,10 @@
       },
       {
         "date": "2026-07-01",
-        "originalPrice": "2157",
-        "promoPrice": "1738",
+        "originalPrice": "2169",
+        "promoPrice": "1748",
         "discount": 20,
-        "stock": 44
+        "stock": 43
       }
     ],
     "formattedName": "Premium — 6 Personen"

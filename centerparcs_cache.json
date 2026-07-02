@@ -241,8 +241,8 @@
   },
   "HB1924": {
     "firstSeen": "2026-06-05T19:23:26.258Z",
-    "latestPromoPrice": "1748",
-    "latestOriginalPrice": "2169",
+    "latestPromoPrice": "1751",
+    "latestOriginalPrice": "2173",
     "history": [
       {
         "date": "2026-06-17",
@@ -351,8 +351,8 @@
       },
       {
         "date": "2026-07-02",
-        "originalPrice": "2169",
-        "promoPrice": "1748",
+        "originalPrice": "2173",
+        "promoPrice": "1751",
         "discount": 20,
         "stock": 43
       }

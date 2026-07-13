@@ -4,19 +4,19 @@ on:
   schedule:
     # --- CRUCIALE NIGHT SWITCH & 1 AM CHECKS ---
     # Zomertijd: 23:45 CEST | Wintertijd: 22:45 CET -> ALTIJD veilig vóór de wissel!
-    - cron: "45 21 * * *"
+#    - cron: "45 21 * * *"
     
     # Zomertijd: 01:00 CEST (1 AM check in de zomer)
-    - cron: "0 23 * * *"
+#    - cron: "0 23 * * *"
     
     # Wintertijd: 01:00 CET (1 AM check in de winter)
     - cron: "0 0 * * *"
 
     # --- REGULIERE INTERVALLEN (~ELKE 4 UUR) ---
-    - cron: "0 3 * * *"   # Zomertijd: 05:00 CEST
+    #- cron: "0 3 * * *"   # Zomertijd: 05:00 CEST
     - cron: "0 7 * * *"   # Zomertijd: 09:00 CEST
-    - cron: "0 11 * * *"  # Zomertijd: 13:00 CEST
-    - cron: "0 15 * * *"  # Zomertijd: 17:00 CEST
+    #- cron: "0 11 * * *"  # Zomertijd: 13:00 CEST
+    #- cron: "0 15 * * *"  # Zomertijd: 17:00 CEST
     - cron: "0 19 * * *"  # Zomertijd: 21:00 CEST
 
   # Allow manual trigger for testing

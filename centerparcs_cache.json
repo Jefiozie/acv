@@ -1,8 +1,8 @@
 {
   "HB1923": {
     "firstSeen": "2026-06-05T19:23:26.258Z",
-    "latestPromoPrice": "1480",
-    "latestOriginalPrice": "1833",
+    "latestPromoPrice": "1427",
+    "latestOriginalPrice": "1767",
     "history": [
       {
         "date": "2026-06-17",
@@ -293,8 +293,8 @@
       },
       {
         "date": "2026-07-28",
-        "originalPrice": "1833",
-        "promoPrice": "1480",
+        "originalPrice": "1767",
+        "promoPrice": "1427",
         "discount": 20,
         "stock": 51
       }
@@ -303,8 +303,8 @@
   },
   "HB1932": {
     "firstSeen": "2026-06-05T19:23:26.258Z",
-    "latestPromoPrice": "1566",
-    "latestOriginalPrice": "1941",
+    "latestPromoPrice": "1518",
+    "latestOriginalPrice": "1881",
     "history": [
       {
         "date": "2026-06-17",
@@ -595,8 +595,8 @@
       },
       {
         "date": "2026-07-28",
-        "originalPrice": "1941",
-        "promoPrice": "1566",
+        "originalPrice": "1881",
+        "promoPrice": "1518",
         "discount": 20,
         "stock": 77
       }
@@ -605,8 +605,8 @@
   },
   "HB1924": {
     "firstSeen": "2026-06-05T19:23:26.258Z",
-    "latestPromoPrice": "1687",
-    "latestOriginalPrice": "2093",
+    "latestPromoPrice": "1635",
+    "latestOriginalPrice": "2027",
     "history": [
       {
         "date": "2026-06-17",
@@ -897,8 +897,8 @@
       },
       {
         "date": "2026-07-28",
-        "originalPrice": "2093",
-        "promoPrice": "1687",
+        "originalPrice": "2027",
+        "promoPrice": "1635",
         "discount": 20,
         "stock": 38
       }

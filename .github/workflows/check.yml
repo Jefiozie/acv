@@ -10,14 +10,14 @@ on:
 #    - cron: "0 23 * * *"
     
     # Wintertijd: 01:00 CET (1 AM check in de winter)
-    - cron: "0 0 * * *"
+#    - cron: "0 0 * * *"
 
     # --- REGULIERE INTERVALLEN (~ELKE 4 UUR) ---
     #- cron: "0 3 * * *"   # Zomertijd: 05:00 CEST
-    - cron: "0 7 * * *"   # Zomertijd: 09:00 CEST
+#    - cron: "0 7 * * *"   # Zomertijd: 09:00 CEST
     #- cron: "0 11 * * *"  # Zomertijd: 13:00 CEST
     #- cron: "0 15 * * *"  # Zomertijd: 17:00 CEST
-    - cron: "0 19 * * *"  # Zomertijd: 21:00 CEST
+#    - cron: "0 19 * * *"  # Zomertijd: 21:00 CEST
 
   # Allow manual trigger for testing
   workflow_dispatch:

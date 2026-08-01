@@ -10,7 +10,7 @@ on:
 #    - cron: "0 23 * * *"
     
     # Wintertijd: 01:00 CET (1 AM check in de winter)
-#    - cron: "0 0 * * *"
+  - cron: "0 0 * * *"
 
     # --- REGULIERE INTERVALLEN (~ELKE 4 UUR) ---
     #- cron: "0 3 * * *"   # Zomertijd: 05:00 CEST

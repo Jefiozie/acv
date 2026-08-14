@@ -1,8 +1,8 @@
 {
   "HB1923": {
     "firstSeen": "2026-06-05T19:23:26.258Z",
-    "latestPromoPrice": "1429",
-    "latestOriginalPrice": "1769",
+    "latestPromoPrice": "1430",
+    "latestOriginalPrice": "1770",
     "history": [
       {
         "date": "2026-06-17",
@@ -409,14 +409,21 @@
         "promoPrice": "1429",
         "discount": 20,
         "stock": 51
+      },
+      {
+        "date": "2026-08-14",
+        "originalPrice": "1770",
+        "promoPrice": "1430",
+        "discount": 20,
+        "stock": 51
       }
     ],
     "formattedName": "Premium — 4 personen"
   },
   "HB1932": {
     "firstSeen": "2026-06-05T19:23:26.258Z",
-    "latestPromoPrice": "1525",
-    "latestOriginalPrice": "1891",
+    "latestPromoPrice": "1526",
+    "latestOriginalPrice": "1892",
     "history": [
       {
         "date": "2026-06-17",
@@ -823,14 +830,21 @@
         "promoPrice": "1525",
         "discount": 20,
         "stock": 72
+      },
+      {
+        "date": "2026-08-14",
+        "originalPrice": "1892",
+        "promoPrice": "1526",
+        "discount": 20,
+        "stock": 71
       }
     ],
     "formattedName": "VIP — 4 personen"
   },
   "HB1924": {
     "firstSeen": "2026-06-05T19:23:26.258Z",
-    "latestPromoPrice": "1647",
-    "latestOriginalPrice": "2043",
+    "latestPromoPrice": "1650",
+    "latestOriginalPrice": "2047",
     "history": [
       {
         "date": "2026-06-17",
@@ -1235,6 +1249,13 @@
         "date": "2026-08-13",
         "originalPrice": "2043",
         "promoPrice": "1647",
+        "discount": 20,
+        "stock": 32
+      },
+      {
+        "date": "2026-08-14",
+        "originalPrice": "2047",
+        "promoPrice": "1650",
         "discount": 20,
         "stock": 32
       }

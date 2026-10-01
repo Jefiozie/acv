@@ -745,6 +745,13 @@
         "promoPrice": "1924",
         "discount": 0,
         "stock": 43
+      },
+      {
+        "date": "2026-10-01",
+        "originalPrice": "1924",
+        "promoPrice": "1924",
+        "discount": 0,
+        "stock": 42
       }
     ],
     "formattedName": "Premium — 4 personen"
@@ -1495,6 +1502,13 @@
         "promoPrice": "2023",
         "discount": 0,
         "stock": 49
+      },
+      {
+        "date": "2026-10-01",
+        "originalPrice": "2023",
+        "promoPrice": "2023",
+        "discount": 0,
+        "stock": 49
       }
     ],
     "formattedName": "VIP — 4 personen"
@@ -2241,6 +2255,13 @@
       },
       {
         "date": "2026-09-30",
+        "originalPrice": "2080",
+        "promoPrice": "2080",
+        "discount": 0,
+        "stock": 6
+      },
+      {
+        "date": "2026-10-01",
         "originalPrice": "2080",
         "promoPrice": "2080",
         "discount": 0,

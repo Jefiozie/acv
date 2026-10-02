@@ -1,8 +1,8 @@
 {
   "HB1923": {
     "firstSeen": "2026-06-05T19:23:26.258Z",
-    "latestPromoPrice": "1924",
-    "latestOriginalPrice": "1924",
+    "latestPromoPrice": "1925",
+    "latestOriginalPrice": "1925",
     "history": [
       {
         "date": "2026-06-17",
@@ -750,6 +750,13 @@
         "date": "2026-10-01",
         "originalPrice": "1924",
         "promoPrice": "1924",
+        "discount": 0,
+        "stock": 42
+      },
+      {
+        "date": "2026-10-02",
+        "originalPrice": "1925",
+        "promoPrice": "1925",
         "discount": 0,
         "stock": 42
       }
@@ -1509,6 +1516,13 @@
         "promoPrice": "2023",
         "discount": 0,
         "stock": 49
+      },
+      {
+        "date": "2026-10-02",
+        "originalPrice": "2023",
+        "promoPrice": "2023",
+        "discount": 0,
+        "stock": 48
       }
     ],
     "formattedName": "VIP — 4 personen"
@@ -2262,6 +2276,13 @@
       },
       {
         "date": "2026-10-01",
+        "originalPrice": "2080",
+        "promoPrice": "2080",
+        "discount": 0,
+        "stock": 6
+      },
+      {
+        "date": "2026-10-02",
         "originalPrice": "2080",
         "promoPrice": "2080",
         "discount": 0,

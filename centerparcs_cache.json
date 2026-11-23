@@ -1116,6 +1116,13 @@
         "promoPrice": "1990",
         "discount": 7,
         "stock": 28
+      },
+      {
+        "date": "2026-11-23",
+        "originalPrice": "2124",
+        "promoPrice": "1990",
+        "discount": 7,
+        "stock": 28
       }
     ],
     "formattedName": "Premium — 4 personen"
@@ -2233,6 +2240,13 @@
       },
       {
         "date": "2026-11-22",
+        "originalPrice": "2222",
+        "promoPrice": "2081",
+        "discount": 7,
+        "stock": 0
+      },
+      {
+        "date": "2026-11-23",
         "originalPrice": "2222",
         "promoPrice": "2081",
         "discount": 7,
@@ -3358,6 +3372,13 @@
         "promoPrice": "2119",
         "discount": 7,
         "stock": 0
+      },
+      {
+        "date": "2026-11-23",
+        "originalPrice": "2261",
+        "promoPrice": "2119",
+        "discount": 7,
+        "stock": 0
       }
     ],
     "formattedName": "Premium — 6 Personen"
@@ -3471,6 +3492,13 @@
         "promoPrice": "1764",
         "discount": 7,
         "stock": 40
+      },
+      {
+        "date": "2026-11-23",
+        "originalPrice": "1881",
+        "promoPrice": "1764",
+        "discount": 7,
+        "stock": 38
       }
     ],
     "formattedName": "Comfort — 4 personen"
@@ -3584,6 +3612,13 @@
         "promoPrice": "1934",
         "discount": 7,
         "stock": 22
+      },
+      {
+        "date": "2026-11-23",
+        "originalPrice": "2064",
+        "promoPrice": "1934",
+        "discount": 7,
+        "stock": 21
       }
     ],
     "formattedName": "Premium — 4 personen"
@@ -3697,6 +3732,13 @@
         "promoPrice": "1971",
         "discount": 7,
         "stock": 2
+      },
+      {
+        "date": "2026-11-23",
+        "originalPrice": "2104",
+        "promoPrice": "1971",
+        "discount": 7,
+        "stock": 6
       }
     ],
     "formattedName": "Comfort — 6 personen"
@@ -3806,6 +3848,13 @@
       },
       {
         "date": "2026-11-22",
+        "originalPrice": "2214",
+        "promoPrice": "2075",
+        "discount": 7,
+        "stock": 1
+      },
+      {
+        "date": "2026-11-23",
         "originalPrice": "2214",
         "promoPrice": "2075",
         "discount": 7,
@@ -3923,6 +3972,13 @@
         "promoPrice": "2133",
         "discount": 7,
         "stock": 2
+      },
+      {
+        "date": "2026-11-23",
+        "originalPrice": "2276",
+        "promoPrice": "2133",
+        "discount": 7,
+        "stock": 2
       }
     ],
     "formattedName": " — 4 personen"
@@ -4036,6 +4092,13 @@
         "promoPrice": "2334",
         "discount": 7,
         "stock": 3
+      },
+      {
+        "date": "2026-11-23",
+        "originalPrice": "2491",
+        "promoPrice": "2334",
+        "discount": 7,
+        "stock": 2
       }
     ],
     "formattedName": "VIP — 4 personen"
@@ -4145,6 +4208,13 @@
       },
       {
         "date": "2026-11-22",
+        "originalPrice": "2586",
+        "promoPrice": "2422",
+        "discount": 7,
+        "stock": 0
+      },
+      {
+        "date": "2026-11-23",
         "originalPrice": "2586",
         "promoPrice": "2422",
         "discount": 7,
@@ -4262,6 +4332,13 @@
         "promoPrice": "2605",
         "discount": 7,
         "stock": 0
+      },
+      {
+        "date": "2026-11-23",
+        "originalPrice": "2781",
+        "promoPrice": "2605",
+        "discount": 7,
+        "stock": 0
       }
     ],
     "formattedName": "VIP — 6 personen"
@@ -4371,6 +4448,13 @@
       },
       {
         "date": "2026-11-22",
+        "originalPrice": "2881",
+        "promoPrice": "2699",
+        "discount": 7,
+        "stock": 0
+      },
+      {
+        "date": "2026-11-23",
         "originalPrice": "2881",
         "promoPrice": "2699",
         "discount": 7,
@@ -4488,6 +4572,13 @@
         "promoPrice": "2488",
         "discount": 7,
         "stock": 0
+      },
+      {
+        "date": "2026-11-23",
+        "originalPrice": "2656",
+        "promoPrice": "2488",
+        "discount": 7,
+        "stock": 0
       }
     ],
     "formattedName": " — 6 personen"
@@ -4601,6 +4692,13 @@
         "promoPrice": "2605",
         "discount": 7,
         "stock": 0
+      },
+      {
+        "date": "2026-11-23",
+        "originalPrice": "2781",
+        "promoPrice": "2605",
+        "discount": 7,
+        "stock": 0
       }
     ],
     "formattedName": "VIP — 6 personen"
@@ -4710,6 +4808,13 @@
       },
       {
         "date": "2026-11-22",
+        "originalPrice": "4281",
+        "promoPrice": "4007",
+        "discount": 7,
+        "stock": 0
+      },
+      {
+        "date": "2026-11-23",
         "originalPrice": "4281",
         "promoPrice": "4007",
         "discount": 7,
